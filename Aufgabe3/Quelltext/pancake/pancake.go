@@ -12,10 +12,10 @@ type Pancake struct {
 	Length int
 }
 
-func ParsePancakeFromFile(filename string) Pancake {
+func ParsePancakeFromFile(filename string) (Pancake, error) {
 	file, err := os.Open(filename)
 	if err != nil {
-		panic(err)
+		return Pancake{}, err
 	}
 	defer file.Close()
 
@@ -27,11 +27,11 @@ func ParsePancakeFromFile(filename string) Pancake {
 	for scanner.Scan() {
 		i, err := strconv.Atoi(scanner.Text())
 		if err != nil {
-			panic(err)
+			return Pancake{}, err
 		}
 		p.Push(i)
 	}
-	return p
+	return p, nil
 }
 
 func (p *Pancake) Flip(i int) {
