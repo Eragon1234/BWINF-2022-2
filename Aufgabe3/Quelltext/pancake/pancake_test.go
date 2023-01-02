@@ -26,7 +26,7 @@ func TestPancake_Flip(t *testing.T) {
 			args: args{
 				i: 1,
 			},
-			want: []int{1, 2, 3},
+			want: []int{1, 2},
 		},
 		{
 			name: "flip all pancakes",
@@ -36,7 +36,7 @@ func TestPancake_Flip(t *testing.T) {
 			args: args{
 				i: 3,
 			},
-			want: []int{3, 2, 1},
+			want: []int{3, 2},
 		},
 		{
 			name: "flip from the middle",
@@ -46,7 +46,7 @@ func TestPancake_Flip(t *testing.T) {
 			args: args{
 				i: 2,
 			},
-			want: []int{1, 3, 2},
+			want: []int{1, 3},
 		},
 	}
 	for _, tt := range tests {

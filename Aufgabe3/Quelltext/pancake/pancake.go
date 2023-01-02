@@ -37,6 +37,7 @@ func ParsePancakeFromFile(filename string) (Pancake, error) {
 func (p *Pancake) Flip(i int) {
 	index := len(p.Stack) - i
 	utils.ReverseSlice(p.Stack[index:])
+	_, p.Stack = utils.Pop(p.Stack) // removing/eating the topmost pancake
 }
 
 func (p *Pancake) Push(e int) {
