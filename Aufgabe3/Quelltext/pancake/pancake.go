@@ -39,6 +39,7 @@ func (p *Pancake) Flip(i int) {
 	index := len(p.Stack) - i
 	utils.ReverseSlice(p.Stack[index:])
 	_, p.Stack = utils.Pop(p.Stack) // removing/eating the topmost pancake
+	p.Length--
 }
 
 // Push adds an element to the stack and increases the length
