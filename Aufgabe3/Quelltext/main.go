@@ -1,7 +1,9 @@
 package main
 
 import (
+	"Aufgabe3/pancake"
 	"flag"
+	"fmt"
 	"os"
 )
 
@@ -21,4 +23,10 @@ func main() {
 		flag.PrintDefaults()
 		return
 	}
+
+	p, err := pancake.ParsePancakeFromFile(filename)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Printf("%v", p.Stack)
 }
