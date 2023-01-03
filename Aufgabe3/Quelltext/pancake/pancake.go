@@ -31,6 +31,7 @@ func ParsePancakeFromFile(filename string) (Pancake, error) {
 		}
 		p.Push(i)
 	}
+	utils.ReverseSlice(p.Stack) // reversing the whole stack because we parse it in reverse order
 	return p, nil
 }
 
