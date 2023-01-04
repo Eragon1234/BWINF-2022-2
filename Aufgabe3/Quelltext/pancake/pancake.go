@@ -7,10 +7,7 @@ import (
 	"strconv"
 )
 
-type Pancake struct {
-	Stack  []int
-	Length int
-}
+type Pancake []int
 
 func ParsePancakeFromFile(filename string) (Pancake, error) {
 	file, err := os.Open(filename)
@@ -31,20 +28,18 @@ func ParsePancakeFromFile(filename string) (Pancake, error) {
 		}
 		p.Push(i)
 	}
-	utils.ReverseSlice(p.Stack) // reversing the whole stack because we parse it in reverse order
+	utils.ReverseSlice(p) // reversing the whole stack because we parse it in reverse order
 	return p, nil
 }
 
 // Flip flips the stack at the given index i and removes/eats the topmost pancake/element
 func (p *Pancake) Flip(i int) {
-	index := len(p.Stack) - i
-	utils.ReverseSlice(p.Stack[index:])
-	_, p.Stack = utils.Pop(p.Stack) // removing/eating the topmost pancake
-	p.Length--
+	index := len(*p) - i
+	utils.ReverseSlice((*p)[index:])
+	_, *p = utils.Pop(*p) // removing/eating the topmost pancake
 }
 
 // Push adds an element to the stack and increases the length
 func (p *Pancake) Push(e int) {
-	p.Stack = append(p.Stack, e)
-	p.Length++
+	*p = append(*p, e)
 }
