@@ -24,9 +24,15 @@ func main() {
 		return
 	}
 
-	p, err := pancake.ParsePancakeFromFile(filename)
+	file, err := os.Open(filename)
 	if err != nil {
 		panic(err)
 	}
-	fmt.Printf("%v", p.Stack)
+	defer file.Close()
+
+	p, err := pancake.ParsePancakeFromReader(file)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Printf("%v", p)
 }

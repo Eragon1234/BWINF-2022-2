@@ -3,20 +3,14 @@ package pancake
 import (
 	"Aufgabe3/utils"
 	"bufio"
-	"os"
+	"io"
 	"strconv"
 )
 
 type Pancake []int
 
-func ParsePancakeFromFile(filename string) (Pancake, error) {
-	file, err := os.Open(filename)
-	if err != nil {
-		return Pancake{}, err
-	}
-	defer file.Close()
-
-	scanner := bufio.NewScanner(file)
+func ParsePancakeFromReader(reader io.Reader) (Pancake, error) {
+	scanner := bufio.NewScanner(reader)
 	scanner.Split(bufio.ScanLines)
 
 	p := Pancake{}
