@@ -4,6 +4,7 @@ import (
 	"Aufgabe3/pancake"
 	"flag"
 	"fmt"
+	"log"
 	"os"
 )
 
@@ -28,7 +29,12 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	defer file.Close()
+	defer func(file *os.File) {
+		err := file.Close()
+		if err != nil {
+			log.Fatal(err)
+		}
+	}(file)
 
 	p, err := pancake.ParsePancakeFromReader(file)
 	if err != nil {
