@@ -27,15 +27,17 @@ func ParsePancakeFromReader(reader io.Reader) (Pancake, error) {
 }
 
 // Flip flips the stack at the given index i and removes/eats the topmost pancake/element
-func (p *Pancake) Flip(i int) {
+func (p *Pancake) Flip(i int) Pancake {
 	index := len(*p) - i
 	utils.ReverseSlice((*p)[index:])
 	_, *p = utils.Pop(*p) // removing/eating the topmost pancake
+	return nil
 }
 
 // Push adds an element to the stack and increases the length
-func (p *Pancake) Push(e int) {
+func (p *Pancake) Push(e int) Pancake {
 	*p = append(*p, e)
+	return nil
 }
 
 // Copy returns a copy of the pancake
