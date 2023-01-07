@@ -7,6 +7,8 @@ import (
 	"strconv"
 )
 
+type SortSteps []int
+
 type Pancake []int
 
 func ParsePancakeFromReader(reader io.Reader) (Pancake, error) {
