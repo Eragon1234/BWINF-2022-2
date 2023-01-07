@@ -40,5 +40,6 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	fmt.Printf("%v", p)
+
+	fmt.Printf("Pancake Sort Way: %v", pancake.ShortestBruteForceSortSteps(p))
 }
