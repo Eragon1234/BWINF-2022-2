@@ -157,3 +157,30 @@ func TestParsePancakeFromReader(t *testing.T) {
 		})
 	}
 }
+
+func TestPancake_Copy(t *testing.T) {
+	tests := []struct {
+		name string
+		p    Pancake
+		want Pancake
+	}{
+		{
+			name: "testing copy",
+			p:    Pancake{1, 2, 3},
+			want: Pancake{1, 2, 3},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := tt.p.Copy(); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("Copy() = %v, want %v", got, tt.want)
+
+				got.Flip(0)
+
+				if !reflect.DeepEqual(tt.p, tt.want) {
+					t.Errorf("Copy() modified pancake, passed in %v, got %v", tt.p, tt.want)
+				}
+			}
+		})
+	}
+}

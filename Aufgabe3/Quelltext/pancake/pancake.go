@@ -37,3 +37,10 @@ func (p *Pancake) Flip(i int) {
 func (p *Pancake) Push(e int) {
 	*p = append(*p, e)
 }
+
+// Copy returns a copy of the pancake
+func (p *Pancake) Copy() Pancake {
+	newP := make(Pancake, len(*p))
+	copy(newP, *p)
+	return newP
+}
