@@ -11,9 +11,9 @@ import (
 var filename string
 
 func init() {
-	flag.StringVar(&filename, "f", "", "Name der Datei mit dem Pancake")
-	flag.StringVar(&filename, "file", "", "Name der Datei mit dem Pancake")
-	flag.StringVar(&filename, "filename", "", "Name der Datei mit dem Pancake")
+	flag.StringVar(&filename, "f", "", "Name der Datei mit dem PancakeStack")
+	flag.StringVar(&filename, "file", "", "Name der Datei mit dem PancakeStack")
+	flag.StringVar(&filename, "filename", "", "Name der Datei mit dem PancakeStack")
 	flag.Parse()
 }
 
@@ -41,5 +41,5 @@ func main() {
 		panic(err)
 	}
 
-	fmt.Printf("Pancake Sort Way: %v", pancake.ShortestBruteForceSortSteps(p))
+	fmt.Printf("PancakeStack Sort Way: %v", pancake.ShortestBruteForceSortSteps(p))
 }

@@ -9,18 +9,18 @@ import (
 
 type SortSteps []int
 
-type Pancake []int
+type Stack []int
 
-func ParsePancakeFromReader(reader io.Reader) (Pancake, error) {
+func ParsePancakeFromReader(reader io.Reader) (Stack, error) {
 	scanner := bufio.NewScanner(reader)
 	scanner.Split(bufio.ScanLines)
 
-	p := Pancake{}
+	p := Stack{}
 	scanner.Scan() // ignoring first line because it represents the length which gets counted automatically
 	for scanner.Scan() {
 		i, err := strconv.Atoi(scanner.Text())
 		if err != nil {
-			return Pancake{}, err
+			return Stack{}, err
 		}
 		p.Push(i)
 	}
@@ -29,7 +29,7 @@ func ParsePancakeFromReader(reader io.Reader) (Pancake, error) {
 }
 
 // Flip flips the stack at the given index i and removes/eats the topmost pancake/element
-func (p *Pancake) Flip(i int) Pancake {
+func (p *Stack) Flip(i int) Stack {
 	index := len(*p) - i
 	utils.ReverseSlice((*p)[index:])
 	_, *p = utils.Pop(*p) // removing/eating the topmost pancake
@@ -37,14 +37,14 @@ func (p *Pancake) Flip(i int) Pancake {
 }
 
 // Push adds an element to the stack and increases the length
-func (p *Pancake) Push(e int) Pancake {
+func (p *Stack) Push(e int) Stack {
 	*p = append(*p, e)
 	return nil
 }
 
 // Copy returns a copy of the pancake
-func (p *Pancake) Copy() Pancake {
-	newP := make(Pancake, len(*p))
+func (p *Stack) Copy() Stack {
+	newP := make(Stack, len(*p))
 	copy(newP, *p)
 	return newP
 }
