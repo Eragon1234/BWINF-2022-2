@@ -36,7 +36,7 @@ func main() {
 		}
 	}(file)
 
-	p, err := pancake.ParsePancakeFromReader(file)
+	p, err := pancake.Parse(file)
 	if err != nil {
 		panic(err)
 	}

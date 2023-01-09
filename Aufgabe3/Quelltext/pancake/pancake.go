@@ -11,7 +11,7 @@ type SortSteps []int
 
 type Stack []int
 
-func ParsePancakeFromReader(reader io.Reader) (Stack, error) {
+func Parse(reader io.Reader) (Stack, error) {
 	scanner := bufio.NewScanner(reader)
 	scanner.Split(bufio.ScanLines)
 

@@ -93,7 +93,7 @@ func TestPancake_Push(t *testing.T) {
 	}
 }
 
-func TestParsePancakeFromReader(t *testing.T) {
+func TestParse(t *testing.T) {
 	type args struct {
 		reader io.Reader
 	}
@@ -146,13 +146,13 @@ func TestParsePancakeFromReader(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := ParsePancakeFromReader(tt.args.reader)
+			got, err := Parse(tt.args.reader)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("ParsePancakeFromReader() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("Parse() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ParsePancakeFromReader() got = %v, want %v", got, tt.want)
+				t.Errorf("Parse() got = %v, want %v", got, tt.want)
 			}
 		})
 	}
