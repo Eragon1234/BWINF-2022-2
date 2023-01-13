@@ -4,6 +4,7 @@ import (
 	"Aufgabe3/pancake"
 	"flag"
 	"fmt"
+	"io/fs"
 	"log"
 	"os"
 )
@@ -11,9 +12,9 @@ import (
 var filename string
 
 func init() {
-	flag.StringVar(&filename, "f", "", "Name der Datei mit dem PancakeStack")
-	flag.StringVar(&filename, "file", "", "Name der Datei mit dem PancakeStack")
-	flag.StringVar(&filename, "filename", "", "Name der Datei mit dem PancakeStack")
+	flag.StringVar(&filename, "f", "", "Pfad zur Datei mit dem PancakeStack")
+	flag.StringVar(&filename, "file", "", "Pfad zur Datei mit dem PancakeStack")
+	flag.StringVar(&filename, "filename", "", "Pfad zur Datei mit dem PancakeStack")
 	flag.Parse()
 }
 
@@ -23,6 +24,10 @@ func main() {
 	} else {
 		flag.PrintDefaults()
 		return
+	}
+
+	if !fs.ValidPath(filename) {
+		log.Fatal("Invalid filepath")
 	}
 
 	file, err := os.Open(filename)
