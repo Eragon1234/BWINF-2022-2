@@ -1,10 +1,12 @@
 package pancake
 
 import (
+	"Aufgabe3/utils"
 	"sort"
+	"sync"
 )
 
-func ShortestBruteForceSortSteps(p Pancake) []int {
+func ShortestBruteForceSortSteps(p Stack) SortSteps {
 	sortWays := AllBruteForceSortSteps(p)
 	min := sortWays[0]
 	for _, sortWay := range sortWays {
@@ -16,23 +18,32 @@ func ShortestBruteForceSortSteps(p Pancake) []int {
 	return min
 }
 
-func AllBruteForceSortSteps(p Pancake) [][]int {
-	var helper func(Pancake, []int) [][]int
-	helper = func(p Pancake, steps []int) [][]int {
+func AllBruteForceSortSteps(p Stack) []SortSteps {
+	var helper func(*sync.WaitGroup, *utils.TicketSystem[SortSteps], Stack, SortSteps)
+	helper = func(wg *sync.WaitGroup, ts *utils.TicketSystem[SortSteps], p Stack, steps SortSteps) {
+		defer wg.Done()
+
 		if sort.SliceIsSorted(p, func(i, j int) bool { return p[i] > p[j] }) {
-			return [][]int{steps}
+			ts.Put(steps)
+			return
 		}
 
-		sortWays := make([][]int, 0)
 		for i := 0; i <= len(p); i++ {
 			pancake := p.Copy()
 			pancake.Flip(i)
-			sortWay := helper(pancake, append(steps, i))
-			sortWays = append(sortWays, sortWay...)
-		}
 
-		return sortWays
+			wg.Add(1)
+			go helper(wg, ts, pancake, append(steps, i))
+		}
 	}
 
-	return helper(p, make([]int, 0))
+	var wg sync.WaitGroup
+	var ts utils.TicketSystem[SortSteps]
+
+	wg.Add(1)
+	go helper(&wg, &ts, p, make([]int, 0))
+
+	wg.Wait()
+
+	return ts.GetDone()
 }
