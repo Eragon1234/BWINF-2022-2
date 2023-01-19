@@ -46,5 +46,5 @@ func main() {
 		panic(err)
 	}
 
-	fmt.Printf("PancakeStack Sort Way: %v", pancake.ShortestBruteForceSortSteps(p))
+	fmt.Printf("PancakeStack Sort Way: %v", pancake.FlipAfterBiggestSortAlgorithm(p))
 }

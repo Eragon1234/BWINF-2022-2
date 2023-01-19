@@ -6,6 +6,28 @@ import (
 	"sync"
 )
 
+func FlipAfterBiggestSortAlgorithm(p Stack) SortSteps {
+	var sortSteps SortSteps
+	for utils.IndexOfBiggestNonSortedInt(p) != 0 {
+		i := utils.IndexOfBiggestNonSortedInt(p)
+		if i == -1 {
+			break
+		}
+		i = len(p) - i + 1
+		sortSteps = append(sortSteps, i)
+		p.Flip(i)
+
+		nsi := utils.NonSortedIndex(p)
+		if nsi == -1 {
+			break
+		}
+		nsi = len(p) - nsi
+		sortSteps = append(sortSteps, nsi)
+		p.Flip(nsi)
+	}
+	return sortSteps
+}
+
 func ShortestBruteForceSortSteps(p Stack) SortSteps {
 	sortWays := AllBruteForceSortSteps(p)
 	min := sortWays[0]
