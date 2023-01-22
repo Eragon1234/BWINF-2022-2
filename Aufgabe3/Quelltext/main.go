@@ -32,18 +32,18 @@ func main() {
 
 	file, err := os.Open(filename)
 	if err != nil {
-		panic(err)
+		panic("Failed to open file")
 	}
 	defer func(file *os.File) {
 		err := file.Close()
 		if err != nil {
-			log.Fatal(err)
+			log.Fatal("Failed to close file")
 		}
 	}(file)
 
 	p, err := pancake.Parse(file)
 	if err != nil {
-		panic(err)
+		panic("Failed to parse pancake")
 	}
 
 	fmt.Printf("PancakeStack Sort Way: %v\n", pancake.BruteForceSort(p))
