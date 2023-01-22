@@ -28,22 +28,18 @@ func FlipAfterBiggestSortAlgorithm(p Stack) SortSteps {
 	return sortSteps
 }
 
-func ShortestBruteForceSortSteps(p Stack) SortSteps {
-	sortWays := AllBruteForceSortSteps(p)
-	min := sortWays[0]
-	for _, sortWay := range sortWays {
-		if len(sortWay) < len(min) {
-			min = sortWay
-		}
-	}
-
-	return min
-}
-
-func AllBruteForceSortSteps(p Stack) []SortSteps {
+func BruteForceSort(p Stack) SortSteps {
 	var helper func(*sync.WaitGroup, *utils.TicketSystem[SortSteps], Stack, SortSteps)
+
 	helper = func(wg *sync.WaitGroup, ts *utils.TicketSystem[SortSteps], p Stack, steps SortSteps) {
 		defer wg.Done()
+
+		// check current steps length is greater than or equal to the smallest steps in done
+		s := ts.GetDone()
+		sort.Slice(s, func(i, j int) bool { return len(s[i]) < len(s[j]) })
+		if len(s) > 0 && len(steps) >= len(s[0]) {
+			return
+		}
 
 		if sort.SliceIsSorted(p, func(i, j int) bool { return p[i] > p[j] }) {
 			ts.Put(steps)
@@ -67,5 +63,7 @@ func AllBruteForceSortSteps(p Stack) []SortSteps {
 
 	wg.Wait()
 
-	return ts.GetDone()
+	steps := ts.GetDone()
+	sort.Slice(steps, func(i, j int) bool { return len(steps[i]) < len(steps[j]) })
+	return steps[0]
 }
