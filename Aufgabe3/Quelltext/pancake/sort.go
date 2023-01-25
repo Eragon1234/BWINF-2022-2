@@ -41,6 +41,9 @@ func BruteForceSort(p Stack) SortSteps {
 
 		if sort.SliceIsSorted(p, func(i, j int) bool { return p[i] > p[j] }) {
 			l := uint32(len(steps))
+			if s := shortest.Load(); l < s {
+				shortest.CompareAndSwap(s, l)
+			}
 			syncMap.Store(l, steps)
 			return
 		}
