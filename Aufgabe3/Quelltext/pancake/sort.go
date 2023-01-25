@@ -2,6 +2,7 @@ package pancake
 
 import (
 	"Aufgabe3/utils"
+	"runtime"
 	"sort"
 	"sync"
 	"sync/atomic"
@@ -41,9 +42,11 @@ func BruteForceSort(p Stack) SortSteps {
 
 		if sort.SliceIsSorted(p, func(i, j int) bool { return p[i] > p[j] }) {
 			l := uint32(len(steps))
-			if s := shortest.Load(); l < s {
-				shortest.CompareAndSwap(s, l)
+
+			for s := shortest.Load(); l < s && !shortest.CompareAndSwap(s, l); s = shortest.Load() {
+				runtime.Gosched()
 			}
+
 			syncMap.Store(l, steps)
 			return
 		}
@@ -59,7 +62,7 @@ func BruteForceSort(p Stack) SortSteps {
 			pancake := p.Copy()
 			pancake.Flip(i)
 
-			go helper(wg, syncMap, pancake, append(steps, i), shortest)
+			go helper(wg, syncMap, pancake, append(SortSteps{i}, steps...), shortest)
 		}
 	}
 
@@ -72,7 +75,7 @@ func BruteForceSort(p Stack) SortSteps {
 	shortest.Store(uint32(len(p) - 1))
 
 	wg.Add(1)
-	go helper(&wg, &syncMap, p, make([]int, 0), &shortest)
+	go helper(&wg, &syncMap, p, SortSteps{}, &shortest)
 
 	wg.Wait()
 
