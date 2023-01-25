@@ -13,33 +13,33 @@ func TestPancake_Flip(t *testing.T) {
 	}
 	tests := []struct {
 		name string
-		p    Stack
+		p    Stack[int]
 		args args
-		want Stack
+		want Stack[int]
 	}{
 		{
 			name: "flip only top most pancake",
-			p:    Stack{1, 2, 3},
+			p:    Stack[int]{1, 2, 3},
 			args: args{
 				i: 1,
 			},
-			want: Stack{1, 2},
+			want: Stack[int]{1, 2},
 		},
 		{
 			name: "flip all pancakes",
-			p:    Stack{1, 2, 3},
+			p:    Stack[int]{1, 2, 3},
 			args: args{
 				i: 3,
 			},
-			want: Stack{3, 2},
+			want: Stack[int]{3, 2},
 		},
 		{
 			name: "flip from the middle",
-			p:    Stack{1, 2, 3},
+			p:    Stack[int]{1, 2, 3},
 			args: args{
 				i: 2,
 			},
-			want: Stack{1, 3},
+			want: Stack[int]{1, 3},
 		},
 	}
 	for _, tt := range tests {
@@ -60,25 +60,25 @@ func TestPancake_Push(t *testing.T) {
 	}
 	tests := []struct {
 		name string
-		p    Stack
+		p    Stack[int]
 		args args
-		want Stack
+		want Stack[int]
 	}{
 		{
 			name: "push pancake on empty stack",
-			p:    Stack{},
+			p:    Stack[int]{},
 			args: args{
 				i: 1,
 			},
-			want: Stack{1},
+			want: Stack[int]{1},
 		},
 		{
 			name: "push pancake on non empty stack",
-			p:    Stack{1, 2, 3},
+			p:    Stack[int]{1, 2, 3},
 			args: args{
 				i: 4,
 			},
-			want: Stack{1, 2, 3, 4},
+			want: Stack[int]{1, 2, 3, 4},
 		},
 	}
 	for _, tt := range tests {
@@ -100,7 +100,7 @@ func TestParse(t *testing.T) {
 	tests := []struct {
 		name    string
 		args    args
-		want    Stack
+		want    Stack[int]
 		wantErr bool
 	}{
 		{
@@ -108,7 +108,7 @@ func TestParse(t *testing.T) {
 			args: args{
 				reader: strings.NewReader(""),
 			},
-			want:    Stack{},
+			want:    Stack[int]{},
 			wantErr: false,
 		},
 		{
@@ -116,7 +116,7 @@ func TestParse(t *testing.T) {
 			args: args{
 				reader: strings.NewReader("1\n1"),
 			},
-			want:    Stack{1},
+			want:    Stack[int]{1},
 			wantErr: false,
 		},
 		{
@@ -124,7 +124,7 @@ func TestParse(t *testing.T) {
 			args: args{
 				reader: strings.NewReader("2\n1\n2"),
 			},
-			want:    Stack{2, 1},
+			want:    Stack[int]{2, 1},
 			wantErr: false,
 		},
 		{
@@ -132,7 +132,7 @@ func TestParse(t *testing.T) {
 			args: args{
 				reader: strings.NewReader("3\n1\n2\n3"),
 			},
-			want:    Stack{3, 2, 1},
+			want:    Stack[int]{3, 2, 1},
 			wantErr: false,
 		},
 		{
@@ -140,7 +140,7 @@ func TestParse(t *testing.T) {
 			args: args{
 				reader: strings.NewReader("this\nis\nan\ninvalid\npancake"),
 			},
-			want:    Stack{},
+			want:    Stack[int]{},
 			wantErr: true,
 		},
 	}
@@ -161,13 +161,13 @@ func TestParse(t *testing.T) {
 func TestPancake_Copy(t *testing.T) {
 	tests := []struct {
 		name string
-		p    Stack
-		want Stack
+		p    Stack[int]
+		want Stack[int]
 	}{
 		{
 			name: "testing copy",
-			p:    Stack{1, 2, 3},
-			want: Stack{1, 2, 3},
+			p:    Stack[int]{1, 2, 3},
+			want: Stack[int]{1, 2, 3},
 		},
 	}
 	for _, tt := range tests {
