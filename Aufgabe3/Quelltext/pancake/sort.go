@@ -55,10 +55,11 @@ func BruteForceSort(p Stack) SortSteps {
 			return
 		}
 
-		wg.Add(len(p))
+		nsi := utils.NonSortedIndex(p)
+		wg.Add(len(p) - nsi)
 		// running the for loop in reverse because I think that flipping more pancakes has a higher chance of sorting the stack
-		// the loop doesn't include 0 because it has the same as flipping 1
-		for i := len(p); i > 0; i-- {
+		// the loop only runs until the non-sorted index because flipping the already sorted pancakes is useless
+		for i := len(p); i > nsi; i-- {
 			pancake := p.Copy()
 			pancake.Flip(i)
 
