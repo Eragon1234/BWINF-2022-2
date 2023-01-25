@@ -31,8 +31,8 @@ func FlipAfterBiggestSortAlgorithm(p Stack) SortSteps {
 }
 
 func BruteForceSort(p Stack) SortSteps {
-	var helper func(*sync.WaitGroup, *sync.Map, Stack, SortSteps, *atomic.Uint32)
-	helper = func(wg *sync.WaitGroup, syncMap *sync.Map, p Stack, steps SortSteps, shortest *atomic.Uint32) {
+	var helper func(*sync.WaitGroup, *utils.SyncMap[uint32, SortSteps], Stack, SortSteps, *atomic.Uint32)
+	helper = func(wg *sync.WaitGroup, syncMap *utils.SyncMap[uint32, SortSteps], p Stack, steps SortSteps, shortest *atomic.Uint32) {
 		defer wg.Done()
 
 		// check current steps length is greater than or equal to the smallest steps in done
@@ -67,7 +67,7 @@ func BruteForceSort(p Stack) SortSteps {
 	}
 
 	var wg sync.WaitGroup
-	var syncMap sync.Map
+	var syncMap utils.SyncMap[uint32, SortSteps]
 
 	var shortest atomic.Uint32
 	// setting the shortest number of steps by default to the length of the stack - 1
@@ -81,7 +81,7 @@ func BruteForceSort(p Stack) SortSteps {
 
 	value, ok := syncMap.Load(shortest.Load())
 	if ok {
-		return value.(SortSteps)
+		return value
 	}
 	return nil
 }
