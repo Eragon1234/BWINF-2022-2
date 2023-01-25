@@ -1,6 +1,6 @@
 package utils
 
-func IndexOfBiggestInt(s []int) int {
+func IndexOfBiggestInt[T Number](s []T) int {
 	if len(s) == 0 {
 		return -1
 	}
@@ -15,7 +15,7 @@ func IndexOfBiggestInt(s []int) int {
 	return maxIndex
 }
 
-func NonSortedIndex(s []int) int {
+func NonSortedIndex[T Number](s []T) int {
 	for i := range s {
 		if IndexOfBiggestInt(s[i:]) != 0 {
 			return i
@@ -24,7 +24,7 @@ func NonSortedIndex(s []int) int {
 	return -1
 }
 
-func IndexOfBiggestNonSortedInt(s []int) int {
+func IndexOfBiggestNonSortedInt[T Number](s []T) int {
 	nsi := NonSortedIndex(s)
 	if nsi == -1 {
 		return -1

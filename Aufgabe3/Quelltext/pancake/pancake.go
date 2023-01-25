@@ -7,44 +7,44 @@ import (
 	"strconv"
 )
 
-type SortSteps []int
+type SortSteps[T utils.Number] []T
 
-type Stack []int
+type Stack[T utils.Number] []T
 
-func Parse(reader io.Reader) (Stack, error) {
+func Parse[T utils.Number](reader io.Reader) (Stack[T], error) {
 	scanner := bufio.NewScanner(reader)
 	scanner.Split(bufio.ScanLines)
 
-	p := Stack{}
+	p := Stack[T]{}
 	scanner.Scan() // ignoring first line because it represents the length which gets counted automatically
 	for scanner.Scan() {
 		i, err := strconv.Atoi(scanner.Text())
 		if err != nil {
-			return Stack{}, err
+			return Stack[T]{}, err
 		}
-		p.Push(i)
+		p.Push(T(i))
 	}
 	utils.ReverseSlice(p) // reversing the whole stack because we parse it in reverse order
 	return p, nil
 }
 
 // Flip flips the stack at the given index i and removes/eats the topmost pancake/element
-func (p *Stack) Flip(i int) Stack {
-	index := len(*p) - i
+func (p *Stack[T]) Flip(i int) Stack[T] {
+	index := len(*p) - int(i)
 	utils.ReverseSlice((*p)[index:])
 	_, *p = utils.Pop(*p) // removing/eating the topmost pancake
 	return nil
 }
 
 // Push adds an element to the stack and increases the length
-func (p *Stack) Push(e int) Stack {
+func (p *Stack[T]) Push(e T) Stack[T] {
 	*p = append(*p, e)
 	return nil
 }
 
 // Copy returns a copy of the pancake
-func (p *Stack) Copy() Stack {
-	newP := make(Stack, len(*p))
+func (p *Stack[T]) Copy() Stack[T] {
+	newP := make(Stack[T], len(*p))
 	copy(newP, *p)
 	return newP
 }

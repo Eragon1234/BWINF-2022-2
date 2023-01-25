@@ -8,15 +8,15 @@ import (
 	"sync/atomic"
 )
 
-func FlipAfterBiggestSortAlgorithm(p Stack) SortSteps {
-	var sortSteps SortSteps
+func FlipAfterBiggestSortAlgorithm[T utils.Number](p Stack[T]) SortSteps[T] {
+	var sortSteps SortSteps[T]
 	for utils.IndexOfBiggestNonSortedInt(p) != 0 {
 		i := utils.IndexOfBiggestNonSortedInt(p)
 		if i == -1 {
 			break
 		}
 		i = len(p) - i + 1
-		sortSteps = append(sortSteps, i)
+		sortSteps = append(sortSteps, T(i))
 		p.Flip(i)
 
 		nsi := utils.NonSortedIndex(p)
@@ -24,15 +24,15 @@ func FlipAfterBiggestSortAlgorithm(p Stack) SortSteps {
 			break
 		}
 		nsi = len(p) - nsi
-		sortSteps = append(sortSteps, nsi)
+		sortSteps = append(sortSteps, T(nsi))
 		p.Flip(nsi)
 	}
 	return sortSteps
 }
 
-func BruteForceSort(p Stack) SortSteps {
-	var helper func(*sync.WaitGroup, *utils.SyncMap[uint32, SortSteps], Stack, SortSteps, *atomic.Uint32)
-	helper = func(wg *sync.WaitGroup, syncMap *utils.SyncMap[uint32, SortSteps], p Stack, steps SortSteps, shortest *atomic.Uint32) {
+func BruteForceSort[T utils.Number](p Stack[T]) SortSteps[T] {
+	var helper func(*sync.WaitGroup, *utils.SyncMap[uint32, SortSteps[T]], Stack[T], SortSteps[T], *atomic.Uint32)
+	helper = func(wg *sync.WaitGroup, syncMap *utils.SyncMap[uint32, SortSteps[T]], p Stack[T], steps SortSteps[T], shortest *atomic.Uint32) {
 		defer wg.Done()
 
 		// check current steps length is greater than or equal to the smallest steps in done
@@ -63,12 +63,16 @@ func BruteForceSort(p Stack) SortSteps {
 			pancake := p.Copy()
 			pancake.Flip(i)
 
-			go helper(wg, syncMap, pancake, append(SortSteps{i}, steps...), shortest)
+			sortSteps := make(SortSteps[T], len(steps))
+			copy(sortSteps, steps)
+			sortSteps = append(sortSteps, T(i))
+
+			go helper(wg, syncMap, pancake, sortSteps, shortest)
 		}
 	}
 
 	var wg sync.WaitGroup
-	var syncMap utils.SyncMap[uint32, SortSteps]
+	var syncMap utils.SyncMap[uint32, SortSteps[T]]
 
 	var shortest atomic.Uint32
 	// setting the shortest number of steps by default to the length of the stack - 1
@@ -76,7 +80,7 @@ func BruteForceSort(p Stack) SortSteps {
 	shortest.Store(uint32(len(p) - 1))
 
 	wg.Add(1)
-	go helper(&wg, &syncMap, p, SortSteps{}, &shortest)
+	go helper(&wg, &syncMap, p, SortSteps[T]{}, &shortest)
 
 	wg.Wait()
 

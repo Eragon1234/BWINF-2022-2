@@ -41,7 +41,7 @@ func main() {
 		}
 	}(file)
 
-	p, err := pancake.Parse(file)
+	p, err := pancake.Parse[uint8](file)
 	if err != nil {
 		panic("Failed to parse pancake")
 	}
