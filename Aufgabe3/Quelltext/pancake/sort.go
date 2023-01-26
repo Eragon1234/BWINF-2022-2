@@ -2,13 +2,15 @@ package pancake
 
 import (
 	"Aufgabe3/utils"
+	"math"
 	"runtime"
-	"sort"
+	"strconv"
+	"strings"
 	"sync"
 	"sync/atomic"
 )
 
-func FlipAfterBiggestSortAlgorithm[T utils.Number](p Stack[T]) SortSteps[T] {
+func FlipAfterBiggestSortAlgorithm[T utils.Number](p Stack[T]) SortSteps[T] { // nearly works
 	var sortSteps SortSteps[T]
 	for utils.IndexOfBiggestNonSortedInt(p) != 0 {
 		i := utils.IndexOfBiggestNonSortedInt(p)
@@ -31,62 +33,69 @@ func FlipAfterBiggestSortAlgorithm[T utils.Number](p Stack[T]) SortSteps[T] {
 }
 
 func BruteForceSort[T utils.Number](p Stack[T]) SortSteps[T] {
-	var helper func(*sync.WaitGroup, *utils.SyncMap[uint32, SortSteps[T]], Stack[T], SortSteps[T], *atomic.Uint32)
-	helper = func(wg *sync.WaitGroup, syncMap *utils.SyncMap[uint32, SortSteps[T]], p Stack[T], steps SortSteps[T], shortest *atomic.Uint32) {
+	var helper func(*sync.WaitGroup, *atomic.Value, Stack[T], SortSteps[T], int)
+	helper = func(wg *sync.WaitGroup, shortest *atomic.Value, p Stack[T], steps SortSteps[T], maxSteps int) {
 		defer wg.Done()
 
+		lenOfSteps := len(steps)
+		sortedIndex := utils.NonSortedIndex(p)
+
 		// check current steps length is greater than or equal to the smallest steps in done
-		if uint32(len(steps)) >= shortest.Load() {
+		if s := shortest.Load(); s != nil && lenOfSteps >= utils.Min(int(math.Floor(float64(len(s.(string)))/2)), maxSteps) {
 			return
 		}
 
-		if sort.SliceIsSorted(p, func(i, j int) bool { return p[i] > p[j] }) {
-			l := uint32(len(steps))
-
-			for s := shortest.Load(); l < s && !shortest.CompareAndSwap(s, l); s = shortest.Load() {
+		if sortedIndex == -1 {
+			var stringSteps strings.Builder
+			stringSteps.Grow(len(steps))
+			for _, step := range steps {
+				stringSteps.WriteString(strconv.Itoa(int(step)))
+				stringSteps.WriteString("\n")
+			}
+			for s := shortest.Load(); (s == nil || lenOfSteps < int(math.Floor(float64(len(s.(string)))/2))) && !shortest.CompareAndSwap(s, stringSteps.String()); s = shortest.Load() {
 				runtime.Gosched()
 			}
 
-			syncMap.Store(l, steps)
 			return
 		}
 
-		if uint32(len(steps)) >= shortest.Load()+1 {
+		if s := shortest.Load(); s != nil && lenOfSteps >= utils.Min(int(math.Floor(float64(len(s.(string)))/2)), maxSteps)+1 {
 			return
 		}
 
-		nsi := utils.NonSortedIndex(p)
-		wg.Add(len(p) - nsi)
+		relevantP := p[sortedIndex:]
 		// running the for loop in reverse because I think that flipping more pancakes has a higher chance of sorting the stack
-		// the loop only runs until the non-sorted index because flipping the already sorted pancakes is useless
-		for i := len(p); i > nsi; i-- {
-			pancake := p.Copy()
+		wg.Add(len(relevantP))
+		for i := len(relevantP); i > 0; i-- {
+			pancake := relevantP.Copy()
 			pancake.Flip(i)
 
 			sortSteps := make(SortSteps[T], len(steps))
 			copy(sortSteps, steps)
 			sortSteps = append(sortSteps, T(i))
 
-			go helper(wg, syncMap, pancake, sortSteps, shortest)
+			go helper(wg, shortest, pancake, sortSteps, maxSteps)
 		}
 	}
 
 	var wg sync.WaitGroup
-	var syncMap utils.SyncMap[uint32, SortSteps[T]]
-
-	var shortest atomic.Uint32
-	// setting the shortest number of steps by default to the length of the stack - 1
-	// because only one element would be left and the whole stack would be sorted
-	shortest.Store(uint32(len(p) - 1))
+	var shortest atomic.Value
 
 	wg.Add(1)
-	go helper(&wg, &syncMap, p, SortSteps[T]{}, &shortest)
+	go helper(&wg, &shortest, p, SortSteps[T]{}, len(p)-1)
 
 	wg.Wait()
 
-	value, ok := syncMap.Load(shortest.Load())
-	if ok {
-		return value
+	value := shortest.Load()
+
+	var sortSteps SortSteps[T]
+	for _, line := range strings.Split(value.(string), "\n") {
+		if line == "" {
+			continue
+		}
+		step, _ := strconv.Atoi(line)
+		sortSteps = append(sortSteps, T(step))
 	}
-	return nil
+
+	return sortSteps
 }
