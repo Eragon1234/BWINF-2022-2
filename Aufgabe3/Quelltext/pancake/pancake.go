@@ -10,15 +10,26 @@ import (
 
 type SortSteps[T utils.Number] []T
 
-func (s SortSteps[T]) String() string {
+func (s *SortSteps[T]) String() string {
 	var stringSteps strings.Builder
 	// makes enough space for a single digit and a newline
-	stringSteps.Grow(len(s) * 2)
-	for _, step := range s {
+	stringSteps.Grow(len(*s) * 2)
+	for _, step := range *s {
 		stringSteps.WriteString(strconv.Itoa(int(step)))
 		stringSteps.WriteString("\n")
 	}
 	return stringSteps.String()
+}
+
+func (s *SortSteps[T]) Push(e T) *SortSteps[T] {
+	*s = append(*s, e)
+	return s
+}
+
+func (s *SortSteps[T]) Copy() *SortSteps[T] {
+	newS := make(SortSteps[T], len(*s))
+	copy(newS, *s)
+	return &newS
 }
 
 type Stack[T utils.Number] []T
@@ -41,22 +52,22 @@ func Parse[T utils.Number](reader io.Reader) (Stack[T], error) {
 }
 
 // Flip flips the stack at the given index i and removes/eats the topmost pancake/element
-func (p *Stack[T]) Flip(i int) Stack[T] {
-	index := len(*p) - int(i)
+func (p *Stack[T]) Flip(i int) *Stack[T] {
+	index := len(*p) - i
 	utils.ReverseSlice((*p)[index:])
 	_, *p = utils.Pop(*p) // removing/eating the topmost pancake
-	return nil
+	return p
 }
 
 // Push adds an element to the stack and increases the length
-func (p *Stack[T]) Push(e T) Stack[T] {
+func (p *Stack[T]) Push(e T) *Stack[T] {
 	*p = append(*p, e)
-	return nil
+	return p
 }
 
 // Copy returns a copy of the pancake
-func (p *Stack[T]) Copy() Stack[T] {
+func (p *Stack[T]) Copy() *Stack[T] {
 	newP := make(Stack[T], len(*p))
 	copy(newP, *p)
-	return newP
+	return &newP
 }

@@ -64,14 +64,7 @@ func BruteForceSort[T utils.Number](p Stack[T]) SortSteps[T] {
 		// running the for loop in reverse because I think that flipping more pancakes has a higher chance of sorting the stack
 		wg.Add(len(relevantP))
 		for i := len(relevantP); i > 0; i-- {
-			pancake := relevantP.Copy()
-			pancake.Flip(i)
-
-			sortSteps := make(SortSteps[T], len(steps))
-			copy(sortSteps, steps)
-			sortSteps = append(sortSteps, T(i))
-
-			go helper(wg, shortest, pancake, sortSteps, maxSteps)
+			go helper(wg, shortest, *relevantP.Copy().Flip(i), *steps.Copy().Push(T(i)), maxSteps)
 		}
 	}
 
