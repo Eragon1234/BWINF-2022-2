@@ -2,7 +2,6 @@ package pancake
 
 import (
 	"Aufgabe3/utils"
-	"log"
 	"runtime"
 	"strconv"
 	"strings"
@@ -74,7 +73,7 @@ func BruteForceSort[T utils.Number](p Stack[T]) SortSteps[T] {
 
 	value, ok := shortest.Load()
 	if !ok {
-		log.Fatalln("no path found")
+		return SortSteps[T]{}
 	}
 
 	var sortSteps SortSteps[T]
