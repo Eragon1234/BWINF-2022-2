@@ -19,12 +19,18 @@ func (v *AtomicValue[T]) Store(value T) {
 	v.v.Store(value)
 }
 
-func (v *AtomicValue[T]) CompareAndSwap(old, new T) bool {
-	return v.v.CompareAndSwap(old, new)
+func (v *AtomicValue[T]) CompareAndSwap(old, n T) bool {
+	_, ok := v.Load()
+	if !ok {
+		// if the value is not set, set it
+		v.Store(n)
+		return true
+	}
+	return v.v.CompareAndSwap(old, n)
 }
 
-func (v *AtomicValue[T]) Swap(new T) (T, bool) {
-	old, ok := v.v.Swap(new).(T)
+func (v *AtomicValue[T]) Swap(n T) (T, bool) {
+	old, ok := v.v.Swap(n).(T)
 	return old, ok
 }
 

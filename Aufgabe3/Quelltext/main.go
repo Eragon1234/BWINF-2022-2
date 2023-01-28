@@ -27,7 +27,7 @@ func main() {
 	}
 
 	if !fs.ValidPath(filename) {
-		log.Fatal("Invalid filepath")
+		log.Fatalln("Invalid filepath")
 	}
 
 	file, err := os.Open(filename)
@@ -37,14 +37,14 @@ func main() {
 	defer func(file *os.File) {
 		err := file.Close()
 		if err != nil {
-			log.Fatal("Failed to close file")
+			panic("Failed to close file")
 		}
 	}(file)
 
 	p, err := pancake.Parse[uint8](file)
 	if err != nil {
-		panic("Failed to parse pancake")
+		log.Fatalln("Failed to parse pancake")
 	}
 
-	fmt.Printf("PancakeStack Sort Way: \n%v\n", pancake.BruteForceSort(p))
+	fmt.Printf("PancakeStack Sort Way: %v\n", pancake.BruteForceSort(p))
 }

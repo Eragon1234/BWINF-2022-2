@@ -35,8 +35,8 @@ func TestIndexOfBiggestInt(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := IndexOfBiggestInt(tt.args.s); got != tt.want {
-				t.Errorf("IndexOfBiggestInt() = %v, want %v", got, tt.want)
+			if got := IndexOfBiggest(tt.args.s); got != tt.want {
+				t.Errorf("IndexOfBiggest() = %v, want %v", got, tt.want)
 			}
 		})
 	}
@@ -75,8 +75,8 @@ func TestIndexOfBiggestNonSortedInt(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := IndexOfBiggestNonSortedInt(tt.args.s); got != tt.want {
-				t.Errorf("IndexOfBiggestNonSortedInt() = %v, want %v", got, tt.want)
+			if got := IndexOfBiggestNonSortedNumber(tt.args.s); got != tt.want {
+				t.Errorf("IndexOfBiggestNonSortedNumber() = %v, want %v", got, tt.want)
 			}
 		})
 	}

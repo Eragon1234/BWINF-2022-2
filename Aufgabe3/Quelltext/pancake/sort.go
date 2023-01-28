@@ -2,6 +2,7 @@ package pancake
 
 import (
 	"Aufgabe3/utils"
+	"log"
 	"runtime"
 	"strconv"
 	"strings"
@@ -10,13 +11,13 @@ import (
 
 func FlipAfterBiggestSortAlgorithm[T utils.Number](p Stack[T]) SortSteps[T] { // nearly works
 	var sortSteps SortSteps[T]
-	for utils.IndexOfBiggestNonSortedInt(p) != 0 {
-		i := utils.IndexOfBiggestNonSortedInt(p)
+	for utils.IndexOfBiggestNonSortedNumber(p) != 0 {
+		i := utils.IndexOfBiggestNonSortedNumber(p)
 		if i == -1 {
 			break
 		}
 		i = len(p) - i + 1
-		sortSteps = append(sortSteps, T(i))
+		sortSteps.Push(T(i))
 		p.Flip(i)
 
 		nsi := utils.NonSortedIndex(p)
@@ -24,7 +25,7 @@ func FlipAfterBiggestSortAlgorithm[T utils.Number](p Stack[T]) SortSteps[T] { //
 			break
 		}
 		nsi = len(p) - nsi
-		sortSteps = append(sortSteps, T(nsi))
+		sortSteps.Push(T(nsi))
 		p.Flip(nsi)
 	}
 	return sortSteps
@@ -36,35 +37,30 @@ func BruteForceSort[T utils.Number](p Stack[T]) SortSteps[T] {
 		defer wg.Done()
 
 		lenOfSteps := len(steps)
-		sortedIndex := utils.NonSortedIndex(p)
 
 		// check current steps length is greater than or equal to the smallest steps in done
 		if s, ok := shortest.Load(); ok && lenOfSteps >= utils.Min(lenOfStepsString(s), maxSteps) {
 			return
 		}
 
+		nonSortedIndex := utils.NonSortedIndex(p)
+
 		// when sorted index is -1 the stack is sorted
-		if sortedIndex == -1 {
-			for s, ok := shortest.Load(); (!ok || lenOfSteps < lenOfStepsString(s)) && !shortest.CompareAndSwap(s, steps.String()); s, ok = shortest.Load() {
-				if !ok {
-					shortest.Store(steps.String())
-					return
-				}
+		if nonSortedIndex == -1 {
+			stepsString := steps.String()
+			for s, ok := shortest.Load(); (!ok || lenOfSteps < lenOfStepsString(s)) && !shortest.CompareAndSwap(s, stepsString); s, ok = shortest.Load() {
 				runtime.Gosched()
 			}
-
 			return
 		}
 
-		if s, ok := shortest.Load(); ok && lenOfSteps >= utils.Min(lenOfStepsString(s), maxSteps)+1 {
-			return
-		}
+		// updating the stack to only contain the unsorted pancakes because we can ignore the sorted ones
+		p = p[nonSortedIndex:]
 
-		relevantP := p[sortedIndex:]
+		wg.Add(len(p))
 		// running the for loop in reverse because I think that flipping more pancakes has a higher chance of sorting the stack
-		wg.Add(len(relevantP))
-		for i := len(relevantP); i > 0; i-- {
-			go helper(wg, shortest, *relevantP.Copy().Flip(i), *steps.Copy().Push(T(i)), maxSteps)
+		for i := len(p); i > 0; i-- {
+			go helper(wg, shortest, *p.Copy().Flip(i), *steps.Copy().Push(T(i)), maxSteps)
 		}
 	}
 
@@ -78,7 +74,7 @@ func BruteForceSort[T utils.Number](p Stack[T]) SortSteps[T] {
 
 	value, ok := shortest.Load()
 	if !ok {
-		panic("no path found")
+		log.Fatalln("no path found")
 	}
 
 	var sortSteps SortSteps[T]
