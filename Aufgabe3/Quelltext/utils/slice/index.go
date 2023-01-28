@@ -1,6 +1,10 @@
-package utils
+package slice
 
-func IndexOfBiggest[T Number](s []T) int { // O(n)
+import (
+	"Aufgabe3/utils"
+)
+
+func IndexOfBiggest[T utils.Number](s []T) int { // O(n)
 	if len(s) == 0 {
 		return -1
 	}
@@ -15,7 +19,7 @@ func IndexOfBiggest[T Number](s []T) int { // O(n)
 	return maxIndex
 }
 
-func NonSortedIndex[T Number](s []T) int { // O(n^2)
+func NonSortedIndex[T utils.Number](s []T) int { // O(n^2)
 	for i := range s {
 		if IndexOfBiggest(s[i:]) != 0 {
 			return i
@@ -24,7 +28,7 @@ func NonSortedIndex[T Number](s []T) int { // O(n^2)
 	return -1
 }
 
-func IndexOfBiggestNonSortedNumber[T Number](s []T) int { // O(n^2)
+func IndexOfBiggestNonSortedNumber[T utils.Number](s []T) int { // O(n^2)
 	nsi := NonSortedIndex(s)
 	if nsi == -1 {
 		return -1

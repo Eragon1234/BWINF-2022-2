@@ -1,6 +1,8 @@
-package utils
+package slice
 
-import "testing"
+import (
+	"testing"
+)
 
 func TestIndexOfBiggestInt(t *testing.T) {
 	type args struct {

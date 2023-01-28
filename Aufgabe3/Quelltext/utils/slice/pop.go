@@ -1,4 +1,4 @@
-package utils
+package slice
 
 func Pop[T any](s []T) (T, []T) {
 	i := len(s) - 1

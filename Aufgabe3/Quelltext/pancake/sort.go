@@ -2,6 +2,8 @@ package pancake
 
 import (
 	"Aufgabe3/utils"
+	"Aufgabe3/utils/slice"
+	"Aufgabe3/utils/sync/atomic"
 	"runtime"
 	"strconv"
 	"strings"
@@ -10,8 +12,8 @@ import (
 
 func FlipAfterBiggestSortAlgorithm[T utils.Number](p Stack[T]) SortSteps[T] { // nearly works
 	var sortSteps SortSteps[T]
-	for utils.IndexOfBiggestNonSortedNumber(p) != 0 {
-		i := utils.IndexOfBiggestNonSortedNumber(p)
+	for slice.IndexOfBiggestNonSortedNumber(p) != 0 {
+		i := slice.IndexOfBiggestNonSortedNumber(p)
 		if i == -1 {
 			break
 		}
@@ -19,7 +21,7 @@ func FlipAfterBiggestSortAlgorithm[T utils.Number](p Stack[T]) SortSteps[T] { //
 		sortSteps.Push(T(i))
 		p.Flip(i)
 
-		nsi := utils.NonSortedIndex(p)
+		nsi := slice.NonSortedIndex(p)
 		if nsi == -1 {
 			break
 		}
@@ -31,8 +33,8 @@ func FlipAfterBiggestSortAlgorithm[T utils.Number](p Stack[T]) SortSteps[T] { //
 }
 
 func BruteForceSort[T utils.Number](p Stack[T]) SortSteps[T] {
-	var helper func(*sync.WaitGroup, *utils.AtomicValue[string], Stack[T], SortSteps[T], int)
-	helper = func(wg *sync.WaitGroup, shortest *utils.AtomicValue[string], p Stack[T], steps SortSteps[T], maxSteps int) {
+	var helper func(*sync.WaitGroup, *atomic.Value[string], Stack[T], SortSteps[T], int)
+	helper = func(wg *sync.WaitGroup, shortest *atomic.Value[string], p Stack[T], steps SortSteps[T], maxSteps int) {
 		defer wg.Done()
 
 		lenOfSteps := len(steps)
@@ -42,7 +44,7 @@ func BruteForceSort[T utils.Number](p Stack[T]) SortSteps[T] {
 			return
 		}
 
-		nonSortedIndex := utils.NonSortedIndex(p)
+		nonSortedIndex := slice.NonSortedIndex(p)
 
 		// when sorted index is -1 the stack is sorted
 		if nonSortedIndex == -1 {
@@ -64,7 +66,7 @@ func BruteForceSort[T utils.Number](p Stack[T]) SortSteps[T] {
 	}
 
 	var wg sync.WaitGroup
-	var shortest utils.AtomicValue[string]
+	var shortest atomic.Value[string]
 
 	wg.Add(1)
 	go helper(&wg, &shortest, p, SortSteps[T]{}, len(p)-1)

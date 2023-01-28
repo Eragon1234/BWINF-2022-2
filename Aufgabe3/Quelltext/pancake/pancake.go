@@ -2,6 +2,7 @@ package pancake
 
 import (
 	"Aufgabe3/utils"
+	"Aufgabe3/utils/slice"
 	"bufio"
 	"io"
 	"strconv"
@@ -47,15 +48,15 @@ func Parse[T utils.Number](reader io.Reader) (Stack[T], error) {
 		}
 		p.Push(T(i))
 	}
-	utils.ReverseSlice(p) // reversing the whole stack because we parse it in reverse order
+	slice.ReverseSlice(p) // reversing the whole stack because we parse it in reverse order
 	return p, nil
 }
 
 // Flip flips the stack at the given index i and removes/eats the topmost pancake/element
 func (p *Stack[T]) Flip(i int) *Stack[T] {
 	index := len(*p) - i
-	utils.ReverseSlice((*p)[index:])
-	_, *p = utils.Pop(*p) // removing/eating the topmost pancake
+	slice.ReverseSlice((*p)[index:])
+	_, *p = slice.Pop(*p) // removing/eating the topmost pancake
 	return p
 }
 
