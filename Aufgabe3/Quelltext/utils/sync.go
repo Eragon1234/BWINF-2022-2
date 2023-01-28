@@ -1,6 +1,32 @@
 package utils
 
-import "sync"
+import (
+	"sync"
+	"sync/atomic"
+)
+
+// AtomicValue is a generic wrapper around atomic.value that allows type safety
+type AtomicValue[T any] struct {
+	v atomic.Value
+}
+
+func (v *AtomicValue[T]) Load() (T, bool) {
+	value, ok := v.v.Load().(T)
+	return value, ok
+}
+
+func (v *AtomicValue[T]) Store(value T) {
+	v.v.Store(value)
+}
+
+func (v *AtomicValue[T]) CompareAndSwap(old, new T) bool {
+	return v.v.CompareAndSwap(old, new)
+}
+
+func (v *AtomicValue[T]) Swap(new T) (T, bool) {
+	old, ok := v.v.Swap(new).(T)
+	return old, ok
+}
 
 // SyncMap is a generic wrapper around sync.Map that allows type safety
 type SyncMap[K comparable, V any] struct {

@@ -2,12 +2,10 @@ package pancake
 
 import (
 	"Aufgabe3/utils"
-	"math"
 	"runtime"
 	"strconv"
 	"strings"
 	"sync"
-	"sync/atomic"
 )
 
 func FlipAfterBiggestSortAlgorithm[T utils.Number](p Stack[T]) SortSteps[T] { // nearly works
@@ -33,33 +31,32 @@ func FlipAfterBiggestSortAlgorithm[T utils.Number](p Stack[T]) SortSteps[T] { //
 }
 
 func BruteForceSort[T utils.Number](p Stack[T]) SortSteps[T] {
-	var helper func(*sync.WaitGroup, *atomic.Value, Stack[T], SortSteps[T], int)
-	helper = func(wg *sync.WaitGroup, shortest *atomic.Value, p Stack[T], steps SortSteps[T], maxSteps int) {
+	var helper func(*sync.WaitGroup, *utils.AtomicValue[string], Stack[T], SortSteps[T], int)
+	helper = func(wg *sync.WaitGroup, shortest *utils.AtomicValue[string], p Stack[T], steps SortSteps[T], maxSteps int) {
 		defer wg.Done()
 
 		lenOfSteps := len(steps)
 		sortedIndex := utils.NonSortedIndex(p)
 
 		// check current steps length is greater than or equal to the smallest steps in done
-		if s := shortest.Load(); s != nil && lenOfSteps >= utils.Min(int(math.Floor(float64(len(s.(string)))/2)), maxSteps) {
+		if s, ok := shortest.Load(); ok && lenOfSteps >= utils.Min(lenOfStepsString(s), maxSteps) {
 			return
 		}
 
+		// when sorted index is -1 the stack is sorted
 		if sortedIndex == -1 {
-			var stringSteps strings.Builder
-			stringSteps.Grow(len(steps))
-			for _, step := range steps {
-				stringSteps.WriteString(strconv.Itoa(int(step)))
-				stringSteps.WriteString("\n")
-			}
-			for s := shortest.Load(); (s == nil || lenOfSteps < int(math.Floor(float64(len(s.(string)))/2))) && !shortest.CompareAndSwap(s, stringSteps.String()); s = shortest.Load() {
+			for s, ok := shortest.Load(); (!ok || lenOfSteps < lenOfStepsString(s)) && !shortest.CompareAndSwap(s, steps.String()); s, ok = shortest.Load() {
+				if !ok {
+					shortest.Store(steps.String())
+					return
+				}
 				runtime.Gosched()
 			}
 
 			return
 		}
 
-		if s := shortest.Load(); s != nil && lenOfSteps >= utils.Min(int(math.Floor(float64(len(s.(string)))/2)), maxSteps)+1 {
+		if s, ok := shortest.Load(); ok && lenOfSteps >= utils.Min(lenOfStepsString(s), maxSteps)+1 {
 			return
 		}
 
@@ -79,17 +76,20 @@ func BruteForceSort[T utils.Number](p Stack[T]) SortSteps[T] {
 	}
 
 	var wg sync.WaitGroup
-	var shortest atomic.Value
+	var shortest utils.AtomicValue[string]
 
 	wg.Add(1)
 	go helper(&wg, &shortest, p, SortSteps[T]{}, len(p)-1)
 
 	wg.Wait()
 
-	value := shortest.Load()
+	value, ok := shortest.Load()
+	if !ok {
+		panic("no path found")
+	}
 
 	var sortSteps SortSteps[T]
-	for _, line := range strings.Split(value.(string), "\n") {
+	for _, line := range strings.Split(value, "\n") {
 		if line == "" {
 			continue
 		}
@@ -98,4 +98,9 @@ func BruteForceSort[T utils.Number](p Stack[T]) SortSteps[T] {
 	}
 
 	return sortSteps
+}
+
+func lenOfStepsString(steps string) int {
+	// because every step is followed by a newline character we can count the number of new line characters to get the number of steps
+	return strings.Count(steps, "\n")
 }

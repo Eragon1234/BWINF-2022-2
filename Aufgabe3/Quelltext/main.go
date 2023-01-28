@@ -46,5 +46,5 @@ func main() {
 		panic("Failed to parse pancake")
 	}
 
-	fmt.Printf("PancakeStack Sort Way: %v\n", pancake.BruteForceSort(p))
+	fmt.Printf("PancakeStack Sort Way: \n%v\n", pancake.BruteForceSort(p))
 }
