@@ -7,9 +7,9 @@ type Value[T any] struct {
 	v atomic.Value
 }
 
-func (v *Value[T]) Load() (T, bool) {
-	value, ok := v.v.Load().(T)
-	return value, ok
+func (v *Value[T]) Load() T {
+	value, _ := v.v.Load().(T)
+	return value
 }
 
 func (v *Value[T]) Store(value T) {
@@ -17,10 +17,7 @@ func (v *Value[T]) Store(value T) {
 }
 
 func (v *Value[T]) CompareAndSwap(old, n T) bool {
-	_, ok := v.Load()
-	if !ok {
-		// if the value is not set, set it
-		v.Store(n)
+	if v.v.CompareAndSwap(nil, n) {
 		return true
 	}
 	return v.v.CompareAndSwap(old, n)

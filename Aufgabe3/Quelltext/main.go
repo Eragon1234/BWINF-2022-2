@@ -46,5 +46,8 @@ func main() {
 		log.Fatalln("Failed to parse pancake")
 	}
 
-	fmt.Printf("PancakeStack Sort Way: %v\n", pancake.BruteForceSort(p))
+	fmt.Println("Pancake:", p)
+	for _, step := range pancake.BruteForceSort(p) {
+		fmt.Printf("Flip at %vth, new pancake %v\n", step, *p.Flip(int(step)))
+	}
 }
