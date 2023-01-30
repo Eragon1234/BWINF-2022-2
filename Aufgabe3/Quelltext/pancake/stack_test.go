@@ -172,14 +172,15 @@ func TestPancake_Copy(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := tt.p.Copy(); !reflect.DeepEqual(got, tt.want) {
+			got := *tt.p.Copy()
+			if !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("Copy() = %v, want %v", got, tt.want)
+			}
 
-				got.Flip(0)
+			got.Flip(0)
 
-				if !reflect.DeepEqual(tt.p, tt.want) {
-					t.Errorf("Copy() modified pancake, passed in %v, got %v", tt.p, tt.want)
-				}
+			if !reflect.DeepEqual(tt.p, tt.want) {
+				t.Errorf("Copy() modified pancake, passed in %v, got %v", tt.p, tt.want)
 			}
 		})
 	}
