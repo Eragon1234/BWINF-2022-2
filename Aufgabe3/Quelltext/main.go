@@ -27,7 +27,8 @@ func main() {
 	}
 
 	if !fs.ValidPath(filename) {
-		log.Fatalln("Invalid filepath")
+		log.Println("Invalid filepath")
+		return
 	}
 
 	file, err := os.Open(filename)
@@ -43,7 +44,8 @@ func main() {
 
 	p, err := pancake.Parse[uint8](file)
 	if err != nil {
-		log.Fatalln("Failed to parse pancake")
+		log.Println("Failed to parse pancake")
+		return
 	}
 
 	fmt.Println("Pancake:", p)
