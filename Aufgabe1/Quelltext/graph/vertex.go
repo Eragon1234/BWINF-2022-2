@@ -1,6 +1,6 @@
 package graph
 
 type Vertex[M any] struct {
-	Index int
+	Name  string
 	Value M
 }

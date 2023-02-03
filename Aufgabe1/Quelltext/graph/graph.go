@@ -2,12 +2,12 @@ package graph
 
 type WeightedGraph[M any, T any] struct {
 	adjacencyMatrix [][]Edge[T]
-	Vertices        []Vertex[M]
+	Vertices        map[string]Vertex[M]
 }
 
 func NewWeightedGraph[M any, T any](size int) *WeightedGraph[M, T] {
 	graph := &WeightedGraph[M, T]{
-		Vertices:        make([]Vertex[M], 0, size),
+		Vertices:        make(map[string]Vertex[M], size),
 		adjacencyMatrix: make([][]Edge[T], size),
 	}
 
@@ -18,8 +18,8 @@ func NewWeightedGraph[M any, T any](size int) *WeightedGraph[M, T] {
 	return graph
 }
 
-func (g *WeightedGraph[M, T]) AddVertex(value M) {
-	g.Vertices = append(g.Vertices, Vertex[M]{Index: len(g.Vertices), Value: value})
+func (g *WeightedGraph[M, T]) AddVertex(name string, value M) {
+	g.Vertices[name] = Vertex[M]{Name: name, Value: value}
 	g.adjacencyMatrix = append(g.adjacencyMatrix, make([]Edge[T], len(g.Vertices)))
 	for i := range g.adjacencyMatrix {
 		g.adjacencyMatrix[i] = append(g.adjacencyMatrix[i], Edge[T]{})
