@@ -1,7 +1,9 @@
 package main
 
 import (
+	"Aufgabe1/graph"
 	"flag"
+	"fmt"
 	"io/fs"
 	"log"
 	"os"
@@ -39,4 +41,11 @@ func main() {
 			panic("Failed to close file")
 		}
 	}(file)
+
+	weightedGraph, err := graph.ParseComplete(file)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Println(weightedGraph)
 }
