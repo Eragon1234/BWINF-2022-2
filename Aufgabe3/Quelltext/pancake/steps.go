@@ -22,14 +22,10 @@ func ParseSortSteps[T utils.Number](s string) (SortSteps[T], error) {
 }
 
 func (s SortSteps[T]) String() string {
-	var stringSteps strings.Builder
-	// makes enough space for a single digit and a newline
-	stringSteps.Grow(len(s) * 2)
-	for _, step := range s {
-		stringSteps.WriteString(strconv.Itoa(int(step)))
-		stringSteps.WriteString("\n")
-	}
-	return stringSteps.String()
+	stringSteps := slice.Map(s, func(e T) string {
+		return strconv.Itoa(int(e))
+	})
+	return strings.Join(stringSteps, "\n")
 }
 
 func (s *SortSteps[T]) Push(e T) *SortSteps[T] {
