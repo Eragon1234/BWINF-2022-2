@@ -1,7 +1,7 @@
 package graph
 
 import (
-	"Aufgabe1/graph/vector"
+	"Aufgabe1/vector"
 	"io"
 	"reflect"
 	"strings"
