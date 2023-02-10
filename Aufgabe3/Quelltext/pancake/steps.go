@@ -2,11 +2,24 @@ package pancake
 
 import (
 	"Aufgabe3/utils"
+	"Aufgabe3/utils/slice"
 	"strconv"
 	"strings"
 )
 
 type SortSteps[T utils.Number] []T
+
+func ParseSortSteps[T utils.Number](s string) (SortSteps[T], error) {
+	var sortSteps SortSteps[T]
+	for _, line := range strings.Split(s, "\n") {
+		if line == "" {
+			continue
+		}
+		step, _ := strconv.Atoi(line)
+		sortSteps = append(sortSteps, T(step))
+	}
+	return sortSteps, nil
+}
 
 func (s SortSteps[T]) String() string {
 	var stringSteps strings.Builder

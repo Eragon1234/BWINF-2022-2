@@ -6,7 +6,7 @@ import (
 	"io"
 )
 
-// ParseComplete parses a complete weighted graph from a reader with the weight as DistanceAngle
+// ParseComplete parses a complete weighted graph with the weight as DistanceAngle
 func ParseComplete(reader io.Reader) (WeightedGraph[vector2.Coordinate, DistanceAngle], error) {
 	scanner := bufio.NewScanner(reader)
 	scanner.Split(bufio.ScanLines)

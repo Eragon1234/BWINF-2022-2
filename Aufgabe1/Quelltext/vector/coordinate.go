@@ -8,6 +8,7 @@ type Coordinate struct {
 	X, Y float64
 }
 
+// ParseCoordinate parses a coordinate with x and y values separated by a space.
 func ParseCoordinate(s string) (Coordinate, error) {
 	var c Coordinate
 	_, err := fmt.Sscanf(s, "%f %f", &c.X, &c.Y)

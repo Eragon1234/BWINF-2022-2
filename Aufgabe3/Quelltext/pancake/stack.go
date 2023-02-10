@@ -10,7 +10,7 @@ import (
 
 type Stack[T utils.Number] []T
 
-func Parse[T utils.Number](reader io.Reader) (Stack[T], error) {
+func ParseStack[T utils.Number](reader io.Reader) (Stack[T], error) {
 	scanner := bufio.NewScanner(reader)
 	scanner.Split(bufio.ScanLines)
 
