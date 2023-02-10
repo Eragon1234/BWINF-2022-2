@@ -5,7 +5,6 @@ import (
 	"Aufgabe3/utils/slice"
 	"Aufgabe3/utils/sync/atomic"
 	"runtime"
-	"strconv"
 	"strings"
 	"sync"
 )
@@ -80,14 +79,7 @@ func BruteForceSort[T utils.Number](p Stack[T]) SortSteps[T] {
 		return SortSteps[T]{}
 	}
 
-	var sortSteps SortSteps[T]
-	for _, line := range strings.Split(value, "\n") {
-		if line == "" {
-			continue
-		}
-		step, _ := strconv.Atoi(line)
-		sortSteps = append(sortSteps, T(step))
-	}
+	sortSteps := ParseSortSteps[T](value)
 
 	return sortSteps
 }

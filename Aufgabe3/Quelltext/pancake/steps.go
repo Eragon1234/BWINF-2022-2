@@ -9,7 +9,7 @@ import (
 
 type SortSteps[T utils.Number] []T
 
-func ParseSortSteps[T utils.Number](s string) (SortSteps[T], error) {
+func ParseSortSteps[T utils.Number](s string) SortSteps[T] {
 	var sortSteps SortSteps[T]
 	for _, line := range strings.Split(s, "\n") {
 		if line == "" {
@@ -18,7 +18,7 @@ func ParseSortSteps[T utils.Number](s string) (SortSteps[T], error) {
 		step, _ := strconv.Atoi(line)
 		sortSteps = append(sortSteps, T(step))
 	}
-	return sortSteps, nil
+	return sortSteps
 }
 
 func (s SortSteps[T]) String() string {
