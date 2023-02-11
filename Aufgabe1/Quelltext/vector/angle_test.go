@@ -50,7 +50,7 @@ func TestAngle(t *testing.T) {
 				from: Coordinate{X: 0, Y: 0},
 				to:   Coordinate{X: -1, Y: -1},
 			},
-			want: 225,
+			want: -135,
 		},
 		{
 			name: "test non origin",
@@ -61,12 +61,12 @@ func TestAngle(t *testing.T) {
 			want: 45,
 		},
 		{
-			name: "test 2, 2 to 0, 0",
+			name: "test other direction",
 			args: args{
 				from: Coordinate{X: 2, Y: 2},
 				to:   Coordinate{X: 0, Y: 0},
 			},
-			want: 45,
+			want: -135,
 		},
 	}
 	for _, tt := range tests {
