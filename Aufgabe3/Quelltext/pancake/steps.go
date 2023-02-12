@@ -11,7 +11,7 @@ type SortSteps[T utils.Number] []T
 
 func ParseSortSteps[T utils.Number](s string) SortSteps[T] {
 	var sortSteps SortSteps[T]
-	for _, line := range strings.Split(s, "\n") {
+	for _, line := range strings.Split(s, " ") {
 		if line == "" {
 			continue
 		}
@@ -25,7 +25,7 @@ func (s SortSteps[T]) String() string {
 	stringSteps := slice.Map(s, func(e T) string {
 		return strconv.Itoa(int(e))
 	})
-	return strings.Join(stringSteps, "\n")
+	return strings.Join(stringSteps, " ")
 }
 
 func (s *SortSteps[T]) Push(e T) *SortSteps[T] {

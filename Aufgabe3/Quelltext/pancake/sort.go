@@ -99,5 +99,5 @@ func BruteForceSort[T utils.Number](p Stack[T]) SortSteps[T] {
 
 func lenOfStepsString(steps string) int {
 	// because every step is followed by a newline character we can count the number of new line characters to get the number of steps
-	return strings.Count(steps, "\n")
+	return strings.Count(steps, " ")
 }
