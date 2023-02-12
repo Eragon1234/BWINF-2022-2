@@ -75,10 +75,15 @@ func BruteForceSort[T utils.Number](p Stack[T]) SortSteps[T] {
 	var shortest atomic.Value[string]
 
 	// setting the shortest by default to my sort algorithm because it is a possible sort path
-	shortest.Store(FlipAfterBiggestSortAlgorithm(*p.Copy()).String())
+	baseShortest := FlipAfterBiggestSortAlgorithm(*p.Copy())
+	shortest.Store(baseShortest.String())
 
 	wg.Add(1)
-	go helper(&wg, &shortest, p, SortSteps[T]{})
+	// creating the sort steps with capacity of the length of the base shortest - 1 because we won't need more than that
+	// the higher capacity is to prevent the slice from being reallocated when we append to it which leads to performance issues
+	// the only problem is that we won't always use the full capacity which increases the memory usage
+	// preventing the reallocation also prevent heap fragmentation
+	go helper(&wg, &shortest, p, make(SortSteps[T], 0, len(baseShortest)-1))
 
 	wg.Wait()
 

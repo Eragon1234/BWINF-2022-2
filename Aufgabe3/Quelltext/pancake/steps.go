@@ -34,7 +34,7 @@ func (s *SortSteps[T]) Push(e T) *SortSteps[T] {
 }
 
 func (s *SortSteps[T]) Copy() *SortSteps[T] {
-	newS := make(SortSteps[T], len(*s))
+	newS := make(SortSteps[T], len(*s), cap(*s))
 	copy(newS, *s)
 	return &newS
 }
