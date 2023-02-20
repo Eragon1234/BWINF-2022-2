@@ -22,7 +22,7 @@ func main() {
 	if filename == "" && len(os.Args) > 1 {
 		filename = os.Args[1]
 	} else {
-		flag.PrintDefaults()
+		flag.Usage()
 		return
 	}
 
