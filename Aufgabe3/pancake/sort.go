@@ -1,9 +1,9 @@
 package pancake
 
 import (
-	"Aufgabe3/utils"
-	"Aufgabe3/utils/slice"
-	"Aufgabe3/utils/sync/atomic"
+	"BWINF/Aufgabe3/utils"
+	"BWINF/Aufgabe3/utils/slice"
+	"BWINF/Aufgabe3/utils/sync/atomic"
 	"runtime"
 	"strings"
 	"sync"

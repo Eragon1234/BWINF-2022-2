@@ -1,31 +1,31 @@
 package graph
 
 import (
-	vector2 "Aufgabe1/vector"
+	"BWINF/Aufgabe1/vector"
 	"bufio"
 	"io"
 )
 
 // ParseComplete parses a complete weighted graph with the weight as DistanceAngle
-func ParseComplete(reader io.Reader) (WeightedGraph[vector2.Coordinate, DistanceAngle], error) {
+func ParseComplete(reader io.Reader) (WeightedGraph[vector.Coordinate, DistanceAngle], error) {
 	scanner := bufio.NewScanner(reader)
 	scanner.Split(bufio.ScanLines)
 
-	var coordinates []vector2.Coordinate
+	var coordinates []vector.Coordinate
 
 	for scanner.Scan() {
 		line := scanner.Text()
 		if line == "" {
 			continue
 		}
-		c, err := vector2.ParseCoordinate(line)
+		c, err := vector.ParseCoordinate(line)
 		if err != nil {
-			return WeightedGraph[vector2.Coordinate, DistanceAngle]{}, err
+			return WeightedGraph[vector.Coordinate, DistanceAngle]{}, err
 		}
 		coordinates = append(coordinates, c)
 	}
 
-	weightedGraph := *NewWeightedGraph[vector2.Coordinate, DistanceAngle](len(coordinates))
+	weightedGraph := *NewWeightedGraph[vector.Coordinate, DistanceAngle](len(coordinates))
 	for _, c := range coordinates {
 		weightedGraph.AddVertex(c.String(), c)
 	}
@@ -36,8 +36,8 @@ func ParseComplete(reader io.Reader) (WeightedGraph[vector2.Coordinate, Distance
 				continue
 			}
 			weightedGraph.AddEdge(vertex.Index, otherVertex.Index, DistanceAngle{
-				Distance: vector2.Distance(vertex.Value, otherVertex.Value),
-				Angle:    vector2.Angle(vertex.Value, otherVertex.Value),
+				Distance: vector.Distance(vertex.Value, otherVertex.Value),
+				Angle:    vector.Angle(vertex.Value, otherVertex.Value),
 			})
 		}
 	}

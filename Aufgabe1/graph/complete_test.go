@@ -1,7 +1,7 @@
 package graph
 
 import (
-	"Aufgabe1/vector"
+	"BWINF/Aufgabe1/vector"
 	"io"
 	"reflect"
 	"strings"
