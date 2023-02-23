@@ -70,6 +70,65 @@ func TestParseComplete(t *testing.T) {
 				},
 			},
 		},
+		{
+			name: "test 2 vertices with blank lines to test if it skips them",
+			args: args{
+				reader: strings.NewReader("2 2\n\n0 0\n\n"),
+			},
+			want: WeightedGraph[vector.Coordinate, DistanceAngle]{
+				Vertices: map[string]Vertex[vector.Coordinate]{
+					"0.000000 0.000000": {
+						Name:  "0.000000 0.000000",
+						Index: 1,
+						Value: vector.Coordinate{X: 0, Y: 0},
+					},
+					"2.000000 2.000000": {
+						Name:  "2.000000 2.000000",
+						Index: 0,
+						Value: vector.Coordinate{X: 2, Y: 2},
+					},
+				},
+				adjacencyMatrix: [][]Edge[DistanceAngle]{
+					{
+						{
+							From: 0,
+							To:   0,
+						},
+						{
+							From: 0,
+							To:   1,
+							Weight: DistanceAngle{
+								Distance: 2.8284271247461903,
+								Angle:    45,
+							},
+							Exists: true,
+						},
+					},
+					{
+						{
+							From: 1,
+							To:   0,
+							Weight: DistanceAngle{
+								Distance: 2.8284271247461903,
+								Angle:    45,
+							},
+							Exists: true,
+						},
+						{
+							From: 1,
+							To:   1,
+						},
+					},
+				},
+			},
+		},
+		{
+			name: "test invalid input",
+			args: args{
+				reader: strings.NewReader("this is not a valid input"),
+			},
+			wantErr: true,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

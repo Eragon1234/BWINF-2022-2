@@ -34,6 +34,13 @@ func TestIndexOfBiggestInt(t *testing.T) {
 			},
 			want: 1,
 		},
+		{
+			name: "Test empty slice",
+			args: args{
+				s: []int{},
+			},
+			want: -1,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
