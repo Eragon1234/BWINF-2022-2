@@ -6,7 +6,6 @@ import (
 	"flag"
 	"fmt"
 	"io/fs"
-	"log"
 	"os"
 )
 
@@ -17,12 +16,23 @@ func init() {
 	flag.StringVar(&filename, "file", "", "Pfad zur Eingabedatei")
 	flag.StringVar(&filename, "filename", "", "Pfad zur Eingabedatei")
 	flag.Parse()
+
+	flag.Usage = func() {
+		fmt.Println("Usage: <command> <filename>")
+		fmt.Println()
+		fmt.Println("Available commands:")
+		fmt.Println("  aufgabe1 <filename>")
+		fmt.Println("  aufgabe3 <filename>")
+		fmt.Println()
+		flag.PrintDefaults()
+	}
 }
 
 func main() {
 	command := flag.Arg(0)
 	if command == "" {
 		fmt.Println("Missing command")
+		fmt.Println()
 		flag.Usage()
 		return
 	}
@@ -30,12 +40,14 @@ func main() {
 		filename = flag.Arg(1)
 	}
 	if filename == "" {
+		fmt.Println("Missing filename")
+		fmt.Println()
 		flag.Usage()
 		return
 	}
 
 	if !fs.ValidPath(filename) {
-		log.Println("Invalid filepath")
+		fmt.Println("Invalid filepath")
 		return
 	}
 
@@ -51,9 +63,6 @@ func main() {
 	}(file)
 
 	switch command {
-	case "help":
-		flag.Usage()
-		return
 	case "aufgabe1":
 		weightedGraph, err := graph.ParseComplete(file)
 		if err != nil {
@@ -64,7 +73,7 @@ func main() {
 	case "aufgabe3":
 		p, err := pancake.ParseStack[uint8](file)
 		if err != nil {
-			log.Println("Failed to parse pancake")
+			fmt.Println("Failed to parse pancake")
 			return
 		}
 
