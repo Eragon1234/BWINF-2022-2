@@ -30,24 +30,22 @@ func init() {
 
 func main() {
 	command := flag.Arg(0)
+
 	if command == "" {
 		fmt.Println("Missing command")
 		fmt.Println()
 		flag.Usage()
 		return
 	}
+
 	if filename == "" {
 		filename = flag.Arg(1)
 	}
-	if filename == "" {
-		fmt.Println("Missing filename")
-		fmt.Println()
-		flag.Usage()
-		return
-	}
 
 	if !fs.ValidPath(filename) {
-		fmt.Println("Invalid filepath")
+		fmt.Println("Invalid or missing filepath")
+		fmt.Println()
+		flag.Usage()
 		return
 	}
 
