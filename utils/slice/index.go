@@ -1,7 +1,7 @@
 package slice
 
 import (
-	"BWINF/Aufgabe3/utils"
+	"BWINF/utils"
 )
 
 func IndexOfBiggest[T utils.Number](s []T) int { // O(n)

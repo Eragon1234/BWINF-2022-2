@@ -1,8 +1,8 @@
 package pancake
 
 import (
-	"BWINF/Aufgabe3/utils"
-	"BWINF/Aufgabe3/utils/slice"
+	"BWINF/utils"
+	"BWINF/utils/slice"
 	"strconv"
 	"strings"
 )

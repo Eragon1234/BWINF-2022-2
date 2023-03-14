@@ -1,7 +1,7 @@
 package pancake
 
 import (
-	"BWINF/Aufgabe3/utils"
+	"BWINF/utils"
 	"reflect"
 	"testing"
 )
