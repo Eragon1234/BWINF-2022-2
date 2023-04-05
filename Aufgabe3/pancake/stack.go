@@ -28,6 +28,13 @@ func ParseStack[T utils.Number](reader io.Reader) (Stack[T], error) {
 	return p, nil
 }
 
+func (s Stack[T]) String() string {
+	stringSteps := slice.Map(s, func(e T) string {
+		return strconv.Itoa(int(e))
+	})
+	return strings.Join(stringSteps, " ")
+}
+
 // Flip flips the stack at the given index i and removes/eats the topmost pancake/element
 func (p *Stack[T]) Flip(i int) *Stack[T] {
 	index := len(*p) - i
