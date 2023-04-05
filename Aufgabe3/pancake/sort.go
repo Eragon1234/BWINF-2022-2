@@ -32,8 +32,8 @@ func FlipAfterBiggestSortAlgorithm[T utils.Number](p Stack[T]) SortSteps[T] { //
 }
 
 func BruteForceSort[T utils.Number](p Stack[T]) SortSteps[T] {
-	var helper func(*sync.WaitGroup, *atomic.Value[string], Stack[T], SortSteps[T])
-	helper = func(wg *sync.WaitGroup, shortest *atomic.Value[string], p Stack[T], steps SortSteps[T]) {
+	var helper func(*sync.WaitGroup, *atomic.Value[string], *atomic.Set[string], Stack[T], SortSteps[T])
+	helper = func(wg *sync.WaitGroup, shortest *atomic.Value[string], visited *atomic.Set[string], p Stack[T], steps SortSteps[T]) {
 		defer wg.Done()
 
 		lenOfSteps := len(steps)
@@ -64,10 +64,19 @@ func BruteForceSort[T utils.Number](p Stack[T]) SortSteps[T] {
 		// it won't affect the indexes because we are counting the flip index from the top of the stack
 		p = p[nonSortedIndex:]
 
-		wg.Add(len(p))
 		// running the for loop in reverse because I think that flipping more pancakes has a higher chance of sorting the stack
 		for i := len(p); i > 0; i-- {
-			go helper(wg, shortest, *p.Copy().Flip(i), *steps.Copy().Push(T(i)))
+			newP := *p.Copy().Flip(i)
+			newPString := newP.String()
+
+			// check if the new stack is already visited
+			if visited.Contains(newPString) {
+				continue
+			}
+			visited.Add(newPString)
+
+			wg.Add(1)
+			go helper(wg, shortest, visited, newP, *steps.Copy().Push(T(i)))
 		}
 	}
 
@@ -83,7 +92,7 @@ func BruteForceSort[T utils.Number](p Stack[T]) SortSteps[T] {
 	// the higher capacity is to prevent the slice from being reallocated when we append to it which leads to performance issues
 	// the only problem is that we won't always use the full capacity which increases the memory usage
 	// preventing the reallocation also prevent heap fragmentation
-	go helper(&wg, &shortest, p, make(SortSteps[T], 0, len(baseShortest)-1))
+	go helper(&wg, &shortest, new(atomic.Set[string]), p, make(SortSteps[T], 0, len(baseShortest)-1))
 
 	wg.Wait()
 
