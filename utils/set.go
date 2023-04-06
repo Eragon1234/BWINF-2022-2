@@ -4,7 +4,14 @@ type Set struct {
 	m map[string]bool
 }
 
+func NewSet(capacity int) *Set {
+	return &Set{m: make(map[string]bool, capacity)}
+}
+
 func (s *Set) Add(key string) {
+	if s.m == nil {
+		s.m = make(map[string]bool)
+	}
 	s.m[key] = true
 }
 
