@@ -1,37 +1,37 @@
 package utils
 
-type Set struct {
-	m map[string]bool
+type Set[T comparable] struct {
+	m map[T]bool
 }
 
-func NewSet(capacity int) *Set {
-	return &Set{m: make(map[string]bool, capacity)}
+func NewSet[T comparable](capacity int) *Set[T] {
+	return &Set[T]{m: make(map[T]bool, capacity)}
 }
 
-func (s *Set) Add(key string) {
+func (s *Set[T]) Add(key T) {
 	if s.m == nil {
-		s.m = make(map[string]bool)
+		s.m = make(map[T]bool)
 	}
 	s.m[key] = true
 }
 
-func (s *Set) Contains(key string) bool {
+func (s *Set[T]) Contains(key T) bool {
 	_, ok := s.m[key]
 	return ok
 }
 
-func (s *Set) Remove(key string) {
+func (s *Set[T]) Remove(key T) {
 	delete(s.m, key)
 }
 
-func (s *Set) Size() int {
+func (s *Set[T]) Size() int {
 	return len(s.m)
 }
 
-func (s *Set) Clear() {
-	s.m = make(map[string]bool)
+func (s *Set[T]) Clear() {
+	s.m = make(map[T]bool)
 }
 
-func (s *Set) IsEmpty() bool {
+func (s *Set[T]) IsEmpty() bool {
 	return s.Size() == 0
 }
