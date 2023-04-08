@@ -67,7 +67,12 @@ func BruteForceSort[T utils.Number](p Stack[T]) SortSteps[T] {
 
 		// running the for loop in reverse because I think that flipping more pancakes has a higher chance of sorting the stack
 		for i := len(p); i > 0; i-- {
-			newP := *p.Copy().Flip(i)
+			var newP Stack[T]
+			if i == 1 {
+				newP = *p.Flip(1)
+			} else {
+				newP = *p.Copy().Flip(i)
+			}
 			newPString := newP.String()
 
 			// check if the new stack is already visited
