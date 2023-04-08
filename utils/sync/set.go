@@ -1,4 +1,4 @@
-package atomic
+package sync
 
 type Set[T comparable] struct {
 	m Map[T, bool]
