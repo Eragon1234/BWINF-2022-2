@@ -3,6 +3,7 @@ package pancake
 import (
 	"BWINF/utils"
 	"BWINF/utils/slice"
+	mySync "BWINF/utils/sync"
 	"BWINF/utils/sync/atomic"
 	"runtime"
 	"strings"
@@ -32,8 +33,8 @@ func FlipAfterBiggestSortAlgorithm[T utils.Number](p Stack[T]) SortSteps[T] { //
 }
 
 func BruteForceSort[T utils.Number](p Stack[T]) SortSteps[T] {
-	var helper func(*sync.WaitGroup, *atomic.Value[string], *atomic.Set[string], Stack[T], SortSteps[T])
-	helper = func(wg *sync.WaitGroup, shortest *atomic.Value[string], visited *atomic.Set[string], p Stack[T], steps SortSteps[T]) {
+	var helper func(*sync.WaitGroup, *atomic.Value[string], *mySync.Set[string], Stack[T], SortSteps[T])
+	helper = func(wg *sync.WaitGroup, shortest *atomic.Value[string], visited *mySync.Set[string], p Stack[T], steps SortSteps[T]) {
 		defer wg.Done()
 
 		lenOfSteps := len(steps)
@@ -92,7 +93,7 @@ func BruteForceSort[T utils.Number](p Stack[T]) SortSteps[T] {
 	// the higher capacity is to prevent the slice from being reallocated when we append to it which leads to performance issues
 	// the only problem is that we won't always use the full capacity which increases the memory usage
 	// preventing the reallocation also prevent heap fragmentation
-	go helper(&wg, &shortest, new(atomic.Set[string]), p, make(SortSteps[T], 0, len(baseShortest)-1))
+	go helper(&wg, &shortest, new(mySync.Set[string]), p, make(SortSteps[T], 0, len(baseShortest)-1))
 
 	wg.Wait()
 
