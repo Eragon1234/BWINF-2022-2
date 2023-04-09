@@ -1,7 +1,7 @@
 package graph
 
-type Edge[T any] struct {
+type Edge[T any, M any] struct {
 	Exists   bool
-	From, To int
+	From, To *Vertex[M]
 	Weight   T
 }

@@ -25,7 +25,7 @@ func ParseComplete(reader io.Reader) (WeightedGraph[vector.Coordinate, DistanceA
 		coordinates = append(coordinates, c)
 	}
 
-	weightedGraph := *NewWeightedGraph[vector.Coordinate, DistanceAngle](len(coordinates))
+	weightedGraph := *NewWeightedGraph[vector.Coordinate, DistanceAngle]()
 	for _, c := range coordinates {
 		weightedGraph.AddVertex(c.String(), c)
 	}
@@ -35,7 +35,7 @@ func ParseComplete(reader io.Reader) (WeightedGraph[vector.Coordinate, DistanceA
 			if i == j {
 				continue
 			}
-			weightedGraph.AddEdge(vertex.Index, otherVertex.Index, DistanceAngle{
+			weightedGraph.AddEdge(vertex, otherVertex, DistanceAngle{
 				Distance: vector.Distance(vertex.Value, otherVertex.Value),
 				Angle:    vector.Angle(vertex.Value, otherVertex.Value),
 			})
