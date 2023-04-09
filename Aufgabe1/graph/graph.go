@@ -27,7 +27,6 @@ func (g *WeightedGraph[D, W]) AddVertex(name string, value D) {
 
 func (g *WeightedGraph[D, W]) AddEdge(from, to *Vertex[D], weight W) {
 	g.adjacencyMatrix[from.Index][to.Index] = Edge[W, D]{From: from, To: to, Exists: true, Weight: weight}
-	g.adjacencyMatrix[to.Index][from.Index] = Edge[W, D]{From: to, To: from, Exists: true, Weight: weight}
 }
 
 func (g *WeightedGraph[D, W]) GetEdge(from, to *Vertex[D]) Edge[W, D] {

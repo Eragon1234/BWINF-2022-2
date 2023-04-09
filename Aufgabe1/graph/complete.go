@@ -27,6 +27,7 @@ func ParseComplete(reader io.Reader) (WeightedGraph[vector.Coordinate, DistanceA
 
 	weightedGraph := *NewWeightedGraph[vector.Coordinate, DistanceAngle]()
 	for _, c := range coordinates {
+		// because the coordinates are unique, we can use them as vertex names since we don't have names
 		weightedGraph.AddVertex(c.String(), c)
 	}
 
