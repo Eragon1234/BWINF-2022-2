@@ -16,3 +16,7 @@ func Angle(from, to Coordinate) float64 {
 func ToDegrees(radians float64) float64 {
 	return radians * 180 / math.Pi
 }
+
+func TurnAngle(angleComing, angleGoing float64) float64 {
+	return math.Abs(angleComing - angleGoing)
+}

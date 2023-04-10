@@ -67,7 +67,8 @@ func main() {
 			fmt.Println(err)
 			return
 		}
-		fmt.Println(weightedGraph)
+		steps := graph.VisitAllShortestEdge(weightedGraph)
+		fmt.Println("Steps:", steps)
 	case "aufgabe3":
 		p, err := pancake.ParseStack[uint8](file)
 		if err != nil {

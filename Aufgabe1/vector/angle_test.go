@@ -77,3 +77,87 @@ func TestAngle(t *testing.T) {
 		})
 	}
 }
+
+func TestTurnAngle(t *testing.T) {
+	type args struct {
+		angleComing float64
+		angleGoing  float64
+	}
+	tests := []struct {
+		name string
+		args args
+		want float64
+	}{
+		{
+			name: "test straight line",
+			args: args{
+				angleComing: 0,
+				angleGoing:  0,
+			},
+			want: 0,
+		},
+		{
+			name: "test 45 degree turn left",
+			args: args{
+				angleComing: 0,
+				angleGoing:  45,
+			},
+			want: 45,
+		},
+		{
+			name: "test 45 degree turn right",
+			args: args{
+				angleComing: 0,
+				angleGoing:  -45,
+			},
+			want: 45,
+		},
+		{
+			name: "test 90 degree turn left",
+			args: args{
+				angleComing: 0,
+				angleGoing:  90,
+			},
+			want: 90,
+		},
+		{
+			name: "test 45 degree coming angle",
+			args: args{
+				angleComing: 45,
+				angleGoing:  0,
+			},
+			want: 45,
+		},
+		{
+			name: "test both degrees positive",
+			args: args{
+				angleComing: 45,
+				angleGoing:  90,
+			},
+			want: 45,
+		},
+		{
+			name: "test both degrees negative",
+			args: args{
+				angleComing: -45,
+				angleGoing:  -90,
+			},
+			want: 45,
+		},
+		{
+			name: "test both negative with coming bigger abs than going",
+			args: args{
+				angleComing: -45,
+				angleGoing:  -30,
+			},
+			want: 15,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := TurnAngle(tt.args.angleComing, tt.args.angleGoing); got != tt.want {
+				t.Errorf("TurnAngle() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
