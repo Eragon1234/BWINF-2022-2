@@ -17,10 +17,16 @@ func NewWeightedGraph[Data any, Weight any]() *WeightedGraph[Data, Weight] {
 func (g *WeightedGraph[D, W]) AddVertex(name string, value D) {
 	g.Vertices[name] = &Vertex[D]{Name: name, Value: value, Index: len(g.Vertices)}
 	g.adjacencyMatrix = append(g.adjacencyMatrix, make([]Edge[W, D], len(g.Vertices)-1))
+	for i := range g.adjacencyMatrix[len(g.adjacencyMatrix)-1] {
+		g.adjacencyMatrix[len(g.adjacencyMatrix)-1][i] = Edge[W, D]{
+			From: g.Vertices[name],
+			To:   g.Vertices[name],
+		}
+	}
 	for i := range g.adjacencyMatrix {
 		g.adjacencyMatrix[i] = append(g.adjacencyMatrix[i], Edge[W, D]{
-			From: &Vertex[D]{},
-			To:   &Vertex[D]{},
+			From: g.Vertices[name],
+			To:   g.Vertices[name],
 		})
 	}
 }
