@@ -35,7 +35,7 @@ func VisitAllShortestEdgeWithStart(g WeightedGraph[vector.Coordinate, DistanceAn
 		})
 		if len(edges) == 0 {
 			edges = slice.FilterFunc(g.GetEdges(curr.To), func(e Edge[DistanceAngle, vector.Coordinate]) bool {
-				return !visited.Contains(e.To)
+				return visited.Contains(e.To)
 			})
 		}
 		minEdge := slice.MinFunc(edges, func(a, b Edge[DistanceAngle, vector.Coordinate]) bool {
