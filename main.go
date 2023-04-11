@@ -68,7 +68,9 @@ func main() {
 			return
 		}
 		steps := graph.VisitAllShortestEdge(weightedGraph)
-		fmt.Println("Steps:", steps)
+		stepsAntColony := graph.VisitAllAntColonyOptimization(weightedGraph)
+		fmt.Println("Steps:", graph.LengthOfPath(steps))
+		fmt.Println("Steps Ant Colony:", graph.LengthOfPheromonePath(stepsAntColony))
 	case "aufgabe3":
 		p, err := pancake.ParseStack[uint8](file)
 		if err != nil {
