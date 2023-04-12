@@ -46,3 +46,16 @@ func (g *WeightedGraph[D, W]) UpdateEdge(from, to *Vertex[D], weight W) {
 func (g WeightedGraph[Data, Weight]) GetEdges(v *Vertex[Data]) []Edge[Weight, Data] {
 	return g.adjacencyMatrix[v.Index]
 }
+
+func (g *WeightedGraph[D, W]) Copy() WeightedGraph[D, W] {
+	newGraph := NewWeightedGraph[D, W]()
+	for _, v := range g.Vertices {
+		newGraph.AddVertex(v.Name, v.Value)
+	}
+	for _, v := range g.Vertices {
+		for _, e := range g.GetEdges(v) {
+			newGraph.AddEdge(newGraph.Vertices[e.From.Name], newGraph.Vertices[e.To.Name], e.Weight)
+		}
+	}
+	return *newGraph
+}
