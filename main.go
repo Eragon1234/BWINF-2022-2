@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"io/fs"
 	"os"
+	"strconv"
 )
 
 var filename string
@@ -88,6 +89,17 @@ func main() {
 		}
 	case "optimize":
 		optimize.OptimizeParameters(filename)
+	case "pwue":
+		pancake.KeepTrackOfSide = keepTrackOfSide
+		n, _ := strconv.Atoi(flag.Arg(2))
+		stack, sortSteps := pancake.CalculatePWUE(n)
+		fmt.Println("Maximum number of steps needed to sort pancake:", len(sortSteps))
+		fmt.Println()
+		fmt.Println("Example:")
+		fmt.Println("Pancake:", stack)
+		for _, step := range sortSteps {
+			fmt.Printf("Flip at %vth, new pancake %v\n", step, *stack.Flip(int(step)))
+		}
 	default:
 		fmt.Println("Unknown command or missing command")
 		flag.Usage()

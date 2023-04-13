@@ -10,7 +10,7 @@ import (
 	"sync"
 )
 
-func FlipAfterBiggestSortAlgorithm[T utils.Number](p Stack[T]) SortSteps[T] { // nearly works
+func FlipAfterBiggestSortAlgorithm[T utils.Number](p Stack[T]) SortSteps[T] { // finds quite good solution
 	var sortSteps SortSteps[T]
 	for slice.IndexOfBiggestNonSortedNumber(p) != 0 {
 		i := slice.IndexOfBiggestNonSortedNumber(p)
