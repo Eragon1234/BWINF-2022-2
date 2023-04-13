@@ -2,6 +2,7 @@ package main
 
 import (
 	"BWINF/Aufgabe1/graph"
+	"BWINF/Aufgabe1/optimize"
 	"BWINF/Aufgabe3/pancake"
 	"flag"
 	"fmt"
@@ -10,11 +11,13 @@ import (
 )
 
 var filename string
+var keepTrackOfSide bool
 
 func init() {
 	flag.StringVar(&filename, "f", "", "Pfad zur Eingabedatei")
 	flag.StringVar(&filename, "file", "", "Pfad zur Eingabedatei")
 	flag.StringVar(&filename, "filename", "", "Pfad zur Eingabedatei")
+	flag.BoolVar(&keepTrackOfSide, "keepTrackOfSide", false, "If the pancake should keep track of the side it is on")
 	flag.Parse()
 
 	flag.Usage = func() {
@@ -68,11 +71,12 @@ func main() {
 			return
 		}
 		steps := graph.VisitAllShortestEdge(weightedGraph)
-		stepsAntColony := graph.VisitAllAntColonyOptimization(weightedGraph)
+		//stepsAntColony := graph.VisitAllAntColonyOptimization(weightedGraph)
 		fmt.Println("Steps:", graph.LengthOfPath(steps))
-		fmt.Println("Steps Ant Colony:", graph.LengthOfPheromonePath(stepsAntColony))
+		//fmt.Println("Steps Ant Colony:", graph.LengthOfPheromonePath(stepsAntColony))
 	case "aufgabe3":
-		p, err := pancake.ParseStack[uint8](file)
+		pancake.KeepTrackOfSide = keepTrackOfSide
+		p, err := pancake.ParseStack[int8](file)
 		if err != nil {
 			fmt.Println("Failed to parse pancake")
 			return
@@ -82,6 +86,8 @@ func main() {
 		for _, step := range pancake.BruteForceSort(p) {
 			fmt.Printf("Flip at %vth, new pancake %v\n", step, *p.Flip(int(step)))
 		}
+	case "optimize":
+		optimize.OptimizeParameters(filename)
 	default:
 		fmt.Println("Unknown command or missing command")
 		flag.Usage()

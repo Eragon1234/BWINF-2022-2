@@ -9,6 +9,8 @@ import (
 	"strings"
 )
 
+var KeepTrackOfSide = false
+
 type Stack[T utils.Number] []T
 
 func ParseStack[T utils.Number](reader io.Reader) (Stack[T], error) {
@@ -40,6 +42,12 @@ func (p *Stack[T]) Flip(i int) *Stack[T] {
 	index := len(*p) - i
 	slice.ReverseSlice((*p)[index:])
 	_, *p = slice.Pop(*p) // removing/eating the topmost pancake
+	if KeepTrackOfSide {
+		// flip the signs of the reversed part
+		for i := index; i < len(*p); i++ {
+			(*p)[i] = -(*p)[i]
+		}
+	}
 	return p
 }
 
