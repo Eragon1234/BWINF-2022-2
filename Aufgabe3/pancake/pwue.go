@@ -14,7 +14,7 @@ func CalculatePWUE(n int) (stack Stack[int8], sortSteps SortSteps[int8]) {
 	perm := NewPermutation(nums)
 	for p := nums; p != nil; p = perm.Next() {
 		s := slice.Map(p, func(i int) int8 {
-			return int8(i + 1)
+			return int8(i)
 		})
 		newSortSteps := BruteForceSort[int8](s)
 		if len(newSortSteps) > len(sortSteps) {
