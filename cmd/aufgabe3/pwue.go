@@ -16,6 +16,9 @@ var Pwue = cli.Command{
 }
 
 func pwue(args []string, cmd *cli.Command) error {
+	if len(args) == 0 {
+		return errors.New("missing n")
+	}
 	n, err := strconv.Atoi(args[0])
 	if err != nil {
 		return errors.New("n muss eine Zahl sein")

@@ -4,7 +4,9 @@ import (
 	"BWINF/Aufgabe3/pancake"
 	"BWINF/cli"
 	"bufio"
+	"errors"
 	"fmt"
+	"io/fs"
 	"os"
 )
 
@@ -16,7 +18,14 @@ var Sort = cli.Command{
 }
 
 func sort(args []string, c *cli.Command) error {
-	file, err := os.Open(args[0])
+	if len(args) == 0 {
+		return errors.New("keine Datei angegeben")
+	}
+	filename := args[0]
+	if !fs.ValidPath(filename) {
+		return errors.New("ungültiger Dateipfad")
+	}
+	file, err := os.Open(filename)
 	if err != nil {
 		return err
 	}

@@ -3,6 +3,7 @@ package aufgabe1
 import (
 	"BWINF/Aufgabe1/graph"
 	"BWINF/cli"
+	"errors"
 	"fmt"
 	"os"
 	"runtime"
@@ -27,6 +28,9 @@ var cfg = graph.Config{
 }
 
 func ant(args []string, cmd *cli.Command) error {
+	if len(args) == 0 {
+		return errors.New("missing filename")
+	}
 	filename := args[0]
 	file, err := os.Open(filename)
 	if err != nil {
