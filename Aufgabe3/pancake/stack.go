@@ -9,8 +9,10 @@ import (
 	"strings"
 )
 
+// KeepTrackOfSide is a global variable that is used to control if the side of the pancakes should be kept track of.
 var KeepTrackOfSide = false
 
+// Stack represents a stack of pancakes/elements
 type Stack[T utils.Number] []T
 
 func ParseStack[T utils.Number](reader io.Reader) (Stack[T], error) {
@@ -18,7 +20,7 @@ func ParseStack[T utils.Number](reader io.Reader) (Stack[T], error) {
 	scanner.Split(bufio.ScanLines)
 
 	p := Stack[T]{}
-	scanner.Scan() // ignoring first line because it represents the length which gets counted automatically
+	scanner.Scan() // ignoring the first line because it represents the length which gets counted automatically
 	for scanner.Scan() {
 		i, err := strconv.Atoi(scanner.Text())
 		if err != nil {

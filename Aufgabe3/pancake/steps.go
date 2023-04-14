@@ -7,6 +7,7 @@ import (
 	"strings"
 )
 
+// SortSteps is a slice of steps to sort a pancake
 type SortSteps[T utils.Number] []T
 
 func ParseSortSteps[T utils.Number](s string) SortSteps[T] {
