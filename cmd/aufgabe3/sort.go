@@ -2,6 +2,7 @@ package aufgabe3
 
 import (
 	"BWINF/Aufgabe3/pancake"
+	sort2 "BWINF/Aufgabe3/pancake/sort"
 	"BWINF/cli"
 	"bufio"
 	"errors"
@@ -35,7 +36,7 @@ func sort(args []string, c *cli.Command) error {
 		return err
 	}
 	fmt.Printf("Stack: %v\n", stack)
-	sortSteps := pancake.BruteForceSort(stack)
+	sortSteps := sort2.BruteForceSort(stack)
 	for _, step := range sortSteps {
 		fmt.Printf("flip bei %v, neuer Stack %v\n", step, stack.Flip(int(step)))
 	}

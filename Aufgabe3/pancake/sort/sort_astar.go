@@ -1,6 +1,7 @@
-package pancake
+package sort
 
 import (
+	"BWINF/Aufgabe3/pancake"
 	"BWINF/utils"
 	"BWINF/utils/queue"
 	"BWINF/utils/slice"
@@ -12,15 +13,15 @@ import (
 )
 
 type State[T utils.Number] struct {
-	Stack *Stack[T]
-	Steps *SortSteps[T]
+	Stack *pancake.Stack[T]
+	Steps *pancake.SortSteps[T]
 }
 
 func (s State[T]) Represent() string {
 	return s.Stack.String()
 }
 
-func BruteForceSortAstar[T utils.Number](p Stack[T]) SortSteps[T] {
+func BruteForceSortAstar[T utils.Number](p pancake.Stack[T]) pancake.SortSteps[T] {
 	var wg sync.WaitGroup
 	var shortest atomic.Value[string]
 	var pq = *mySync.NewPriorityQueue[*State[T]]()
@@ -31,26 +32,27 @@ func BruteForceSortAstar[T utils.Number](p Stack[T]) SortSteps[T] {
 	pq.Push(queue.Item[*State[T]]{
 		Value: &State[T]{
 			Stack: p.Copy(),
-			Steps: &SortSteps[T]{},
+			Steps: &pancake.SortSteps[T]{},
 		},
 		Priority: cost(p),
 	})
 
 	run := true
 
-	workerCount := runtime.NumCPU() * 100
+	workerCount := runtime.NumCPU()
 
 	waiting := slice.MakeFunc(workerCount, func(i int) *bool {
 		b := false
 		return &b
 	})
-	wg.Add(workerCount)
-	for i := 0; i < workerCount; i++ {
+	for i := 0; i < workerCount && run; i++ {
+		wg.Add(1)
 		go worker(&wg, &run, waiting[i], &pq, &shortest)
 	}
 
 	for slice.CountFunc(waiting, func(b *bool) bool { return *b }) != len(waiting) || pq.Len() != 0 {
-		time.Sleep(time.Millisecond * 5)
+		time.Sleep(time.Millisecond * 500)
+		runtime.Gosched()
 	}
 
 	run = false
@@ -59,10 +61,10 @@ func BruteForceSortAstar[T utils.Number](p Stack[T]) SortSteps[T] {
 
 	value := shortest.Load()
 	if value == "" {
-		return SortSteps[T]{}
+		return pancake.SortSteps[T]{}
 	}
 
-	sortSteps := ParseSortSteps[T](value)
+	sortSteps := pancake.ParseSortSteps[T](value)
 
 	return sortSteps
 }
@@ -126,7 +128,7 @@ func doStack[T utils.Number](item *State[T], pq *mySync.PriorityQueue[*State[T]]
 	}
 }
 
-func cost[T utils.Number](p Stack[T]) uint8 {
+func cost[T utils.Number](p pancake.Stack[T]) uint8 {
 	if len(p) == 0 {
 		return 0
 	}

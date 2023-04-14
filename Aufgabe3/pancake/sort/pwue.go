@@ -1,12 +1,13 @@
-package pancake
+package sort
 
 import (
+	"BWINF/Aufgabe3/pancake"
 	"BWINF/utils/slice"
 )
 
-func CalculatePWUE(n int) (stack Stack[int8], sortSteps SortSteps[int8]) {
+func CalculatePWUE(n int) (stack pancake.Stack[int8], sortSteps pancake.SortSteps[int8]) {
 	if n == 0 {
-		return Stack[int8]{}, SortSteps[int8]{}
+		return pancake.Stack[int8]{}, pancake.SortSteps[int8]{}
 	}
 	nums := slice.MakeFunc(n, func(i int) int {
 		return i + 1

@@ -1,7 +1,7 @@
 package aufgabe3
 
 import (
-	"BWINF/Aufgabe3/pancake"
+	sort2 "BWINF/Aufgabe3/pancake/sort"
 	"BWINF/cli"
 	"errors"
 	"fmt"
@@ -23,7 +23,7 @@ func pwue(args []string, cmd *cli.Command) error {
 	if err != nil {
 		return errors.New("n muss eine Zahl sein")
 	}
-	stack, sortSteps := pancake.CalculatePWUE(n)
+	stack, sortSteps := sort2.CalculatePWUE(n)
 	fmt.Println("PWUE Zahl für n =", n)
 	fmt.Println("Beispiel:")
 	fmt.Println(stack)

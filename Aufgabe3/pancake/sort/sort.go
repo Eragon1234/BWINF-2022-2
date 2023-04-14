@@ -1,6 +1,7 @@
-package pancake
+package sort
 
 import (
+	"BWINF/Aufgabe3/pancake"
 	"BWINF/utils"
 	"BWINF/utils/slice"
 	mySync "BWINF/utils/sync"
@@ -10,8 +11,8 @@ import (
 	"sync"
 )
 
-func FlipAfterBiggestSortAlgorithm[T utils.Number](p Stack[T]) SortSteps[T] { // finds quite good solution
-	var sortSteps SortSteps[T]
+func FlipAfterBiggestSortAlgorithm[T utils.Number](p pancake.Stack[T]) pancake.SortSteps[T] { // finds quite good solution
+	var sortSteps pancake.SortSteps[T]
 	for slice.IndexOfBiggestNonSortedNumber(p) != 0 {
 		i := slice.IndexOfBiggestNonSortedNumber(p)
 		if i == -1 {
@@ -32,9 +33,9 @@ func FlipAfterBiggestSortAlgorithm[T utils.Number](p Stack[T]) SortSteps[T] { //
 	return sortSteps
 }
 
-func BruteForceSort[T utils.Number](p Stack[T]) SortSteps[T] {
-	var helper func(*sync.WaitGroup, *atomic.Value[string], *mySync.Set[string], Stack[T], SortSteps[T])
-	helper = func(wg *sync.WaitGroup, shortest *atomic.Value[string], visited *mySync.Set[string], p Stack[T], steps SortSteps[T]) {
+func BruteForceSort[T utils.Number](p pancake.Stack[T]) pancake.SortSteps[T] {
+	var helper func(*sync.WaitGroup, *atomic.Value[string], *mySync.Set[string], pancake.Stack[T], pancake.SortSteps[T])
+	helper = func(wg *sync.WaitGroup, shortest *atomic.Value[string], visited *mySync.Set[string], p pancake.Stack[T], steps pancake.SortSteps[T]) {
 		defer wg.Done()
 
 		lenOfSteps := len(steps)
@@ -46,7 +47,7 @@ func BruteForceSort[T utils.Number](p Stack[T]) SortSteps[T] {
 
 		nonSortedIndex := slice.NonSortedIndex(p)
 		var negativeCount int
-		if KeepTrackOfSide {
+		if pancake.KeepTrackOfSide {
 			negativeCount = slice.CountFunc(p, func(e T) bool {
 				return e < 0
 			})
@@ -68,14 +69,14 @@ func BruteForceSort[T utils.Number](p Stack[T]) SortSteps[T] {
 		}
 
 		if nonSortedIndex > 0 && negativeCount == 0 {
-			// updating the stack to only contain the unsorted pancakes because we can ignore the sorted ones
+			// updating the stack to only contain the unsorted pancakes because we can ignore the sorted ones,
 			// it won't affect the indexes because we are counting the flip index from the top of the stack
 			p = p[nonSortedIndex:]
 		}
 
 		// running the for loop in reverse because I think that flipping more pancakes has a higher chance of sorting the stack
 		for i := len(p); i > 0; i-- {
-			var newP Stack[T]
+			var newP pancake.Stack[T]
 			if i == 1 {
 				newP = *p.Flip(1)
 			} else {
@@ -98,9 +99,9 @@ func BruteForceSort[T utils.Number](p Stack[T]) SortSteps[T] {
 	var wg sync.WaitGroup
 	var shortest atomic.Value[string]
 
-	baseShortest := make(SortSteps[T], 0, len(p))
+	baseShortest := make(pancake.SortSteps[T], 0, len(p))
 	// setting the shortest by default to my sort algorithm because it is a possible sort path
-	if !KeepTrackOfSide {
+	if !pancake.KeepTrackOfSide {
 		baseShortest = FlipAfterBiggestSortAlgorithm(*p.Copy())
 		shortest.Store(baseShortest.String())
 	}
@@ -110,16 +111,16 @@ func BruteForceSort[T utils.Number](p Stack[T]) SortSteps[T] {
 	// the higher capacity is to prevent the slice from being reallocated when we append to it which leads to performance issues
 	// the only problem is that we won't always use the full capacity which increases the memory usage
 	// preventing the reallocation also prevent heap fragmentation
-	go helper(&wg, &shortest, new(mySync.Set[string]), p, make(SortSteps[T], 0, len(baseShortest)))
+	go helper(&wg, &shortest, new(mySync.Set[string]), p, make(pancake.SortSteps[T], 0, len(baseShortest)))
 
 	wg.Wait()
 
 	value := shortest.Load()
 	if value == "" {
-		return SortSteps[T]{}
+		return pancake.SortSteps[T]{}
 	}
 
-	sortSteps := ParseSortSteps[T](value)
+	sortSteps := pancake.ParseSortSteps[T](value)
 
 	return sortSteps
 }
