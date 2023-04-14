@@ -1,5 +1,7 @@
 package utils
 
+// Permutation is a struct that can be used to generate all permutations of a slice.
+// The permutations don't include the original slice.
 type Permutation struct {
 	original    []int
 	permutation []int
