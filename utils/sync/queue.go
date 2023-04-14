@@ -2,6 +2,7 @@ package sync
 
 import (
 	"BWINF/utils"
+	"BWINF/utils/queue"
 )
 
 type Representer interface {
@@ -10,7 +11,7 @@ type Representer interface {
 
 type PriorityQueue[T Representer] struct {
 	lock    chan struct{}
-	pg      utils.PriorityQueue[T]
+	pg      queue.PriorityQueue[T]
 	visited utils.Set[string]
 }
 
@@ -19,12 +20,12 @@ func NewPriorityQueue[T Representer]() *PriorityQueue[T] {
 	lock <- struct{}{}
 	return &PriorityQueue[T]{
 		lock:    lock,
-		pg:      utils.PriorityQueue[T]{},
+		pg:      queue.PriorityQueue[T]{},
 		visited: utils.Set[string]{},
 	}
 }
 
-func (pq *PriorityQueue[T]) Push(val utils.PQItem[T]) {
+func (pq *PriorityQueue[T]) Push(val queue.Item[T]) {
 	<-pq.lock
 	defer func() {
 		pq.lock <- struct{}{}
@@ -37,7 +38,7 @@ func (pq *PriorityQueue[T]) Push(val utils.PQItem[T]) {
 	pq.pg.Push(val)
 }
 
-func (pq *PriorityQueue[T]) Pop() (utils.PQItem[T], bool) {
+func (pq *PriorityQueue[T]) Pop() (queue.Item[T], bool) {
 	<-pq.lock
 	defer func() {
 		pq.lock <- struct{}{}

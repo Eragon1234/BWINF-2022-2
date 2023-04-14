@@ -2,6 +2,7 @@ package pancake
 
 import (
 	"BWINF/utils"
+	"BWINF/utils/queue"
 	"BWINF/utils/slice"
 	mySync "BWINF/utils/sync"
 	"BWINF/utils/sync/atomic"
@@ -22,12 +23,12 @@ func (s State[T]) Represent() string {
 func BruteForceSortAstar[T utils.Number](p Stack[T]) SortSteps[T] {
 	var wg sync.WaitGroup
 	var shortest atomic.Value[string]
-	var queue = *mySync.NewPriorityQueue[*State[T]]()
+	var pq = *mySync.NewPriorityQueue[*State[T]]()
 
 	// setting the shortest by default to my sort algorithm because it is a possible sort path
 	baseShortest := FlipAfterBiggestSortAlgorithm(*p.Copy())
 	shortest.Store(baseShortest.String())
-	queue.Push(utils.PQItem[*State[T]]{
+	pq.Push(queue.Item[*State[T]]{
 		Value: &State[T]{
 			Stack: p.Copy(),
 			Steps: &SortSteps[T]{},
@@ -37,7 +38,7 @@ func BruteForceSortAstar[T utils.Number](p Stack[T]) SortSteps[T] {
 
 	run := true
 
-	workerCount := runtime.NumCPU()
+	workerCount := runtime.NumCPU() * 100
 
 	waiting := slice.MakeFunc(workerCount, func(i int) *bool {
 		b := false
@@ -45,10 +46,10 @@ func BruteForceSortAstar[T utils.Number](p Stack[T]) SortSteps[T] {
 	})
 	wg.Add(workerCount)
 	for i := 0; i < workerCount; i++ {
-		go worker(&wg, &run, waiting[i], &queue, &shortest)
+		go worker(&wg, &run, waiting[i], &pq, &shortest)
 	}
 
-	for slice.CountFunc(waiting, func(b *bool) bool { return *b }) != len(waiting) || queue.Len() != 0 {
+	for slice.CountFunc(waiting, func(b *bool) bool { return *b }) != len(waiting) || pq.Len() != 0 {
 		time.Sleep(time.Millisecond * 5)
 	}
 
@@ -115,7 +116,7 @@ func doStack[T utils.Number](item *State[T], pq *mySync.PriorityQueue[*State[T]]
 	// running the for loop in reverse because I think that flipping more pancakes has a higher chance of sorting the stack
 	for i := len(p); i > 0; i-- {
 		newP := p.Copy().Flip(i)
-		pq.Push(utils.PQItem[*State[T]]{
+		pq.Push(queue.Item[*State[T]]{
 			Value: &State[T]{
 				Stack: newP,
 				Steps: steps.Copy().Push(T(i)),
