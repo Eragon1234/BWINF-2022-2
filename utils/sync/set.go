@@ -1,5 +1,6 @@
 package sync
 
+// Set is a set data structure safe for concurrent use by multiple goroutines.
 type Set[T comparable] struct {
 	m Map[T, bool]
 }
