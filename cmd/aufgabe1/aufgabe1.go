@@ -11,4 +11,5 @@ var Aufgabe1 = cli.Command{
 
 func init() {
 	Aufgabe1.AddCommand(Ant)
+	Aufgabe1.AddCommand(Shortest)
 }

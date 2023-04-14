@@ -21,19 +21,24 @@ func VisitAllShortestEdgeWithStart(g WeightedGraph[vector.Coordinate, DistanceAn
 	visited.Add(start)
 	var path []Edge[DistanceAngle, vector.Coordinate]
 
-	var curr = Edge[DistanceAngle, vector.Coordinate]{
-		From: start,
-		To:   start,
-		Weight: DistanceAngle{
-			Distance: 0,
-			Angle:    0,
-		},
-	}
 	for visited.Size() < len(g.Vertices) {
-		edges := slice.FilterFunc(g.GetEdges(curr.To), func(e Edge[DistanceAngle, vector.Coordinate]) bool {
-			return visited.Contains(e.To) || (vector.TurnAngle(curr.Weight.Angle, e.Weight.Angle) > 90 && curr.Exists)
-		})
+		var curr Edge[DistanceAngle, vector.Coordinate]
+		var edges []Edge[DistanceAngle, vector.Coordinate]
+		if len(path) > 0 {
+			curr = path[len(path)-1]
+			edges = slice.FilterFunc(g.GetEdges(curr.To), func(e Edge[DistanceAngle, vector.Coordinate]) bool {
+				return visited.Contains(e.To) || vector.TurnAngle(curr.Weight.Angle, e.Weight.Angle) > 90
+			})
+		} else {
+			edges = slice.FilterFunc(g.GetEdges(start), func(e Edge[DistanceAngle, vector.Coordinate]) bool {
+				return visited.Contains(e.To)
+			})
+		}
 		if len(edges) == 0 {
+			// we could backtrack,
+			// but in some cases we need to accept a turn angle greater than 90 because we mostly can't have a path with all turn angles less than 90
+			// figuring out when to accept a turn angle greater than 90 takes too much time,
+			// so we just accept a turn angle greater than 90
 			edges = slice.FilterFunc(g.GetEdges(curr.To), func(e Edge[DistanceAngle, vector.Coordinate]) bool {
 				return visited.Contains(e.To)
 			})
@@ -42,7 +47,6 @@ func VisitAllShortestEdgeWithStart(g WeightedGraph[vector.Coordinate, DistanceAn
 			return a.Weight.Distance < b.Weight.Distance
 		})
 		visited.Add(minEdge.To)
-		curr = minEdge
 		path = append(path, minEdge)
 	}
 	return path
