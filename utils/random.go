@@ -2,6 +2,8 @@ package utils
 
 import "math/rand"
 
+// ChooseWeighted chooses an index from a slice of weights.
+// the weights are relative to each other
 func ChooseWeighted(weights []float64) int {
 	total := 0.0
 	for _, w := range weights {
