@@ -4,7 +4,9 @@ import (
 	"BWINF/Aufgabe1/vector"
 	"BWINF/utils"
 	"BWINF/utils/slice"
+	"fmt"
 	"math/rand"
+	"os"
 	"sort"
 	"sync"
 )
@@ -39,7 +41,7 @@ func VisitAllAntColonyOptimization(cfg Config, g WeightedGraph[vector.Coordinate
 	var wg sync.WaitGroup
 
 	for i := 0; i < cfg.NumOfIterations; i++ {
-		//fmt.Fprintln(os.Stderr, "iteration, bestLength:", i, LengthOfPheromonePath(shortestPath))
+		fmt.Fprintln(os.Stderr, "iteration, bestLength:", i, LengthOfPheromonePath(shortestPath))
 
 		result := make(chan []Edge[PheromoneDistanceAngle, vector.Coordinate], cfg.NumOfAnts)
 		wg.Add(cfg.NumOfAnts)
@@ -66,7 +68,7 @@ func VisitAllAntColonyOptimization(cfg Config, g WeightedGraph[vector.Coordinate
 			}
 		}
 
-		//fmt.Fprint(os.Stderr, "\u001B[1A\u001B[K")
+		fmt.Fprint(os.Stderr, "\u001B[1A\u001B[K")
 	}
 	return shortestPath
 }

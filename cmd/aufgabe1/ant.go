@@ -17,14 +17,14 @@ var Ant = cli.Command{
 }
 
 var cfg = graph.Config{
-	NumOfAnts:                    runtime.NumCPU() * 64,
-	NumOfIterations:              10_000,
-	RandomChance:                 0.5,
-	PheromoneWeight:              0.3,
+	NumOfAnts:                    runtime.NumCPU() * 128,
+	NumOfIterations:              100_000,
+	RandomChance:                 0.6,
+	PheromoneWeight:              0.5,
 	DistanceWeight:               0.7,
-	PheromoneDecreasement:        0.7,
+	PheromoneDecreasement:        0.8,
 	EliteProportion:              0.1,
-	CutoffWhenLongerThanShortest: 5.0,
+	CutoffWhenLongerThanShortest: 3.0,
 }
 
 func ant(args []string, cmd *cli.Command) error {
@@ -43,7 +43,7 @@ func ant(args []string, cmd *cli.Command) error {
 	path := graph.VisitAllAntColonyOptimization(cfg, g)
 	fmt.Println("Length of path:", graph.LengthOfPheromonePath(path))
 	for _, edge := range path {
-		fmt.Printf("%v -> %v\n", edge.From, edge.To)
+		fmt.Printf("%v -> %v\n", edge.From.Name, edge.To.Name)
 	}
 	return nil
 }
