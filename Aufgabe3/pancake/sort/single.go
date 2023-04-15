@@ -6,7 +6,7 @@ import (
 	"BWINF/utils/slice"
 )
 
-func BruteForceSort(p pancake.Stack) pancake.SortSteps {
+func BruteForce(p pancake.Stack) pancake.SortSteps {
 	var shortest pancake.SortSteps
 	pq := queue.PriorityQueue[State]{}
 	pq.Push(State{

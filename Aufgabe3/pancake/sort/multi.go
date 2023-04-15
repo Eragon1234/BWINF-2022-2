@@ -11,7 +11,7 @@ import (
 	"time"
 )
 
-func BruteForceSortMultiGoroutine(p pancake.Stack) pancake.SortSteps {
+func BruteForceMultiGoroutine(p pancake.Stack) pancake.SortSteps {
 	var wg sync.WaitGroup
 	var shortest atomic.Value[string]
 	var pq mySync.PriorityQueue[State]

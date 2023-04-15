@@ -2,7 +2,7 @@ package aufgabe3
 
 import (
 	"BWINF/Aufgabe3/pancake"
-	sort2 "BWINF/Aufgabe3/pancake/sort"
+	"BWINF/Aufgabe3/pancake/sort"
 	"BWINF/cli"
 	"bufio"
 	"errors"
@@ -12,13 +12,13 @@ import (
 )
 
 var Sort = cli.Command{
-	Name:        "sort",
-	Usage:       "sort <filename>",
+	Name:        "sortPancake",
+	Usage:       "sortPancake <filename>",
 	Description: "Berechnet den Sortierweg für den Stack in der Datei",
-	Action:      sort,
+	Action:      sortPancake,
 }
 
-func sort(args []string, c *cli.Command) error {
+func sortPancake(args []string, c *cli.Command) error {
 	if len(args) == 0 {
 		return errors.New("keine Datei angegeben")
 	}
@@ -31,14 +31,14 @@ func sort(args []string, c *cli.Command) error {
 		return err
 	}
 	defer file.Close()
-	stack, err := pancake.ParseStack[int8](bufio.NewReader(file))
+	stack, err := pancake.ParseStack(bufio.NewReader(file))
 	if err != nil {
 		return err
 	}
 	fmt.Printf("Stack: %v\n", stack)
-	sortSteps := sort2.BruteForceSort(stack)
+	sortSteps := sort.BruteForce(stack)
 	for _, step := range sortSteps {
-		fmt.Printf("flip bei %v, neuer Stack %v\n", step, stack.Flip(int(step)))
+		fmt.Printf("flip bei %v, neuer Stack %v\n", step, stack.Flip(step))
 	}
 	return nil
 }

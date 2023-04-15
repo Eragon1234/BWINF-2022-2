@@ -18,7 +18,7 @@ func CalculatePWUE(n int) (stack pancake.Stack, sortSteps pancake.SortSteps) {
 		s := slice.Map(p, func(i int) int8 {
 			return int8(i)
 		})
-		newSortSteps := BruteForceSort[int8](s)
+		newSortSteps := BruteForce(s)
 		if len(newSortSteps) > len(sortSteps) {
 			sortSteps = newSortSteps
 			stack = s
