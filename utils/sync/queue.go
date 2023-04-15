@@ -11,19 +11,13 @@ type PriorityQueue[T any] struct {
 	pg queue.PriorityQueue[T]
 }
 
-func NewPriorityQueue[T any]() *PriorityQueue[T] {
-	return &PriorityQueue[T]{
-		pg: queue.PriorityQueue[T]{},
-	}
-}
-
-func (pq *PriorityQueue[T]) Push(val queue.Item[T]) {
+func (pq *PriorityQueue[T]) Push(val T, priority uint8) {
 	pq.mu.Lock()
 	defer pq.mu.Unlock()
-	pq.pg.Push(val)
+	pq.pg.Push(val, priority)
 }
 
-func (pq *PriorityQueue[T]) Pop() (queue.Item[T], bool) {
+func (pq *PriorityQueue[T]) Pop() (T, bool) {
 	pq.mu.Lock()
 	defer pq.mu.Unlock()
 	return pq.pg.Pop()

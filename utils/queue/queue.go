@@ -14,15 +14,20 @@ type PriorityQueue[T any] struct {
 	ipq internalPriorityQueue[T]
 }
 
-func (pq *PriorityQueue[T]) Push(x Item[T]) {
-	heap.Push(&pq.ipq, x)
+func (pq *PriorityQueue[T]) Push(x T, priority uint8) {
+	item := Item[T]{
+		Value:    x,
+		Priority: priority,
+		index:    pq.ipq.Len(),
+	}
+	heap.Push(&pq.ipq, item)
 }
 
-func (pq *PriorityQueue[T]) Pop() (Item[T], bool) {
+func (pq *PriorityQueue[T]) Pop() (T, bool) {
 	if pq.ipq.Len() == 0 {
-		return Item[T]{}, false
+		return *new(T), false
 	}
-	return heap.Pop(&pq.ipq).(Item[T]), true
+	return heap.Pop(&pq.ipq).(Item[T]).Value, true
 }
 
 func (pq *PriorityQueue[T]) Update(item Item[T], value T, priority uint8) {

@@ -6,9 +6,9 @@ import (
 	"BWINF/utils/slice"
 )
 
-func CalculatePWUE(n int) (stack pancake.Stack[int8], sortSteps pancake.SortSteps[int8]) {
+func CalculatePWUE(n int) (stack pancake.Stack, sortSteps pancake.SortSteps) {
 	if n == 0 {
-		return pancake.Stack[int8]{}, pancake.SortSteps[int8]{}
+		return pancake.Stack{}, pancake.SortSteps{}
 	}
 	nums := slice.MakeFunc(n, func(i int) int {
 		return i + 1

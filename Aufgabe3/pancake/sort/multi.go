@@ -2,40 +2,27 @@ package sort
 
 import (
 	"BWINF/Aufgabe3/pancake"
-	"BWINF/utils"
-	"BWINF/utils/queue"
 	"BWINF/utils/slice"
 	mySync "BWINF/utils/sync"
 	"BWINF/utils/sync/atomic"
 	"runtime"
+	"strings"
 	"sync"
 	"time"
 )
 
-type State[T utils.Number] struct {
-	Stack *pancake.Stack[T]
-	Steps *pancake.SortSteps[T]
-}
-
-func (s State[T]) Represent() string {
-	return s.Stack.String()
-}
-
-func BruteForceSortAstar[T utils.Number](p pancake.Stack[T]) pancake.SortSteps[T] {
+func BruteForceSortMultiGoroutine(p pancake.Stack) pancake.SortSteps {
 	var wg sync.WaitGroup
 	var shortest atomic.Value[string]
-	var pq = *mySync.NewPriorityQueue[*State[T]]()
+	var pq mySync.PriorityQueue[State]
 
 	// setting the shortest by default to my sort algorithm because it is a possible sort path
-	baseShortest := FlipAfterBiggestSortAlgorithm(*p.Copy())
+	baseShortest := FlipAfterBiggest(*p.Copy())
 	shortest.Store(baseShortest.String())
-	pq.Push(queue.Item[*State[T]]{
-		Value: &State[T]{
-			Stack: p.Copy(),
-			Steps: &pancake.SortSteps[T]{},
-		},
-		Priority: cost(p),
-	})
+	pq.Push(State{
+		Stack: &p,
+		Steps: &baseShortest,
+	}, cost(p))
 
 	run := true
 
@@ -61,15 +48,15 @@ func BruteForceSortAstar[T utils.Number](p pancake.Stack[T]) pancake.SortSteps[T
 
 	value := shortest.Load()
 	if value == "" {
-		return pancake.SortSteps[T]{}
+		return pancake.SortSteps{}
 	}
 
-	sortSteps := pancake.ParseSortSteps[T](value)
+	sortSteps := pancake.ParseSortSteps(value)
 
 	return sortSteps
 }
 
-func worker[T utils.Number](wg *sync.WaitGroup, run, waiting *bool, pq *mySync.PriorityQueue[*State[T]], shortest *atomic.Value[string]) {
+func worker(wg *sync.WaitGroup, run, waiting *bool, pq *mySync.PriorityQueue[State], shortest *atomic.Value[string]) {
 	defer wg.Done()
 
 	for *run {
@@ -79,12 +66,11 @@ func worker[T utils.Number](wg *sync.WaitGroup, run, waiting *bool, pq *mySync.P
 			continue
 		}
 		*waiting = false
-		item := state.Value
-		doStack(item, pq, shortest)
+		doStack(state, pq, shortest)
 	}
 }
 
-func doStack[T utils.Number](item *State[T], pq *mySync.PriorityQueue[*State[T]], shortest *atomic.Value[string]) {
+func doStack(item State, pq *mySync.PriorityQueue[State], shortest *atomic.Value[string]) {
 	p := *item.Stack
 	steps := *item.Steps
 
@@ -96,8 +82,12 @@ func doStack[T utils.Number](item *State[T], pq *mySync.PriorityQueue[*State[T]]
 	}
 
 	nonSortedIndex := slice.NonSortedIndex(p)
+	var negativeCount int
+	if pancake.KeepTrackOfSide {
+		negativeCount = slice.CountFunc(p, func(i int8) bool { return i < 0 })
+	}
 	// when sorted index is -1 the stack is sorted
-	if nonSortedIndex == -1 {
+	if nonSortedIndex == -1 && negativeCount == 0 {
 		stepsString := steps.String()
 		for s := shortest.Load(); s == "" || lenOfSteps < lenOfStepsString(s) && !shortest.CompareAndSwap(s, stepsString); s = shortest.Load() {
 			runtime.Gosched()
@@ -116,19 +106,16 @@ func doStack[T utils.Number](item *State[T], pq *mySync.PriorityQueue[*State[T]]
 	p = p[nonSortedIndex:]
 
 	// running the for loop in reverse because I think that flipping more pancakes has a higher chance of sorting the stack
-	for i := len(p); i > 0; i-- {
-		newP := p.Copy().Flip(i)
-		pq.Push(queue.Item[*State[T]]{
-			Value: &State[T]{
-				Stack: newP,
-				Steps: steps.Copy().Push(T(i)),
-			},
-			Priority: cost(*newP),
-		})
+	for i := len(p); i >= 0; i-- {
+		newP := p.Copy().Flip(int8(i))
+		pq.Push(State{
+			Stack: newP,
+			Steps: steps.Copy().Push(int8(i)),
+		}, cost(*newP))
 	}
 }
 
-func cost[T utils.Number](p pancake.Stack[T]) uint8 {
+func cost(p pancake.Stack) uint8 {
 	if len(p) == 0 {
 		return 0
 	}
@@ -146,4 +133,8 @@ func cost[T utils.Number](p pancake.Stack[T]) uint8 {
 		}
 	}
 	return count + uint8(len(p))
+}
+
+func lenOfStepsString(s string) int {
+	return strings.Count(s, " ") + 1
 }
