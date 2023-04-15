@@ -4,6 +4,7 @@ import (
 	"BWINF/Aufgabe3/pancake"
 	"BWINF/Aufgabe3/pancake/sort"
 	"BWINF/cli"
+	"BWINF/utils/set"
 	"bufio"
 	"errors"
 	"fmt"
@@ -12,8 +13,11 @@ import (
 )
 
 var Sort = cli.Command{
-	Name:        "sortPancake",
-	Usage:       "sortPancake <filename>",
+	Name:  "sort",
+	Usage: "sort <filename>",
+	Aliases: *set.FromSlice([]string{
+		"sortPancake",
+	}),
 	Description: "Berechnet den Sortierweg für den Stack in der Datei",
 	Action:      sortPancake,
 }

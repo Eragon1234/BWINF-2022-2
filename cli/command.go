@@ -55,7 +55,7 @@ func (c *Command) Run(args []string) error {
 			return nil
 		}
 		for _, command := range c.subcommands {
-			if command.Name == commands[0] {
+			if command.Name == commands[0] || command.Aliases.Contains(commands[0]) {
 				return command.Run(slice.FilterFunc(args, func(arg string) bool {
 					return arg == commands[0]
 				}))

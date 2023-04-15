@@ -8,6 +8,14 @@ func New[T comparable](capacity int) *Set[T] {
 	return &Set[T]{m: make(map[T]bool, capacity)}
 }
 
+func FromSlice[T comparable](slice []T) *Set[T] {
+	set := New[T](len(slice))
+	for _, item := range slice {
+		set.Add(item)
+	}
+	return set
+}
+
 func (s *Set[T]) Add(key T) {
 	if s.m == nil {
 		s.m = make(map[T]bool)
