@@ -16,12 +16,14 @@ func BruteForceMultiGoroutine(p pancake.Stack) pancake.SortSteps {
 	var shortest atomic.Value[string]
 	var pq mySync.PriorityQueue[State]
 
-	// setting the shortest by default to my sort algorithm because it is a possible sort path
-	baseShortest := FlipAfterBiggest(*p.Copy())
-	shortest.Store(baseShortest.String())
+	if !pancake.KeepTrackOfSide {
+		// setting the shortest by default to my sort algorithm because it is a possible sort path
+		baseShortest := FlipAfterBiggest(*p.Copy())
+		shortest.Store(baseShortest.String())
+	}
 	pq.Push(State{
 		Stack: &p,
-		Steps: &baseShortest,
+		Steps: &pancake.SortSteps{},
 	}, cost(p))
 
 	run := true
