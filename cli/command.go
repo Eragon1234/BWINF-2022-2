@@ -1,7 +1,7 @@
 package cli
 
 import (
-	"BWINF/utils"
+	"BWINF/utils/set"
 	"BWINF/utils/slice"
 	"flag"
 	"fmt"
@@ -12,7 +12,7 @@ type Command struct {
 	subcommands []Command
 	Flags       *flag.FlagSet
 	Name        string
-	Aliases     utils.Set[string]
+	Aliases     set.Set[string]
 	Usage       string
 	Description string
 	Action      func(args []string, cmd *Command) error

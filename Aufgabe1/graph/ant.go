@@ -3,6 +3,7 @@ package graph
 import (
 	"BWINF/Aufgabe1/vector"
 	"BWINF/utils"
+	"BWINF/utils/set"
 	"BWINF/utils/slice"
 	"fmt"
 	"math/rand"
@@ -77,7 +78,7 @@ func AntDoPath(cfg Config, wg *sync.WaitGroup, result chan<- []Edge[PheromoneDis
 	defer wg.Done()
 
 	path := make([]Edge[PheromoneDistanceAngle, vector.Coordinate], 0, len(g.Vertices))
-	var visited utils.Set[*Vertex[vector.Coordinate]]
+	var visited set.Set[*Vertex[vector.Coordinate]]
 	var current = Edge[PheromoneDistanceAngle, vector.Coordinate]{
 		From: g.Vertices["start"],
 		To:   g.Vertices["start"],

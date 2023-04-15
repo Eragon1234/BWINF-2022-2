@@ -2,7 +2,7 @@ package graph
 
 import (
 	"BWINF/Aufgabe1/vector"
-	"BWINF/utils"
+	"BWINF/utils/set"
 	"BWINF/utils/slice"
 )
 
@@ -17,7 +17,7 @@ func VisitAllShortestEdge(g WeightedGraph[vector.Coordinate, DistanceAngle]) []E
 }
 
 func VisitAllShortestEdgeWithStart(g WeightedGraph[vector.Coordinate, DistanceAngle], start *Vertex[vector.Coordinate]) []Edge[DistanceAngle, vector.Coordinate] {
-	var visited utils.Set[*Vertex[vector.Coordinate]]
+	var visited set.Set[*Vertex[vector.Coordinate]]
 	visited.Add(start)
 	var path []Edge[DistanceAngle, vector.Coordinate]
 

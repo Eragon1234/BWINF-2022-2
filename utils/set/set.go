@@ -1,10 +1,10 @@
-package utils
+package set
 
 type Set[T comparable] struct {
 	m map[T]bool
 }
 
-func NewSet[T comparable](capacity int) *Set[T] {
+func New[T comparable](capacity int) *Set[T] {
 	return &Set[T]{m: make(map[T]bool, capacity)}
 }
 
