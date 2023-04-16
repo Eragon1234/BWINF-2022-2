@@ -38,7 +38,8 @@ func sortAstar(args []string, _ *cli.Command) error {
 	if err != nil {
 		return err
 	}
+	printStack(p)
 	sortSteps := sort.Astar(p)
-	printStackAndSortSteps(p, sortSteps)
+	printSortSteps(p, sortSteps)
 	return nil
 }

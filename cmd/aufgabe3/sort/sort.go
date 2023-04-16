@@ -46,14 +46,18 @@ func sortPancake(args []string, _ *cli.Command) error {
 	if err != nil {
 		return err
 	}
+	printStack(stack)
 	sortSteps := sort.BruteForceInlined(stack)
-	printStackAndSortSteps(stack, sortSteps)
+	printSortSteps(stack, sortSteps)
 	return nil
 }
 
-func printStackAndSortSteps(stack pancake.Stack, steps pancake.SortSteps) {
+func printStack(stack pancake.Stack) {
 	fmt.Printf("Stack: %v\n", stack)
-	for _, step := range steps {
+}
+
+func printSortSteps(stack pancake.Stack, sortSteps pancake.SortSteps) {
+	for _, step := range sortSteps {
 		fmt.Printf("flip bei %v, neuer Stack %v\n", step, stack.Flip(int(step)))
 	}
 }

@@ -4,7 +4,7 @@ import (
 	"BWINF/cli"
 	"BWINF/cmd/aufgabe1"
 	"BWINF/cmd/aufgabe3"
-	"log"
+	"fmt"
 	"os"
 )
 
@@ -21,6 +21,7 @@ var command = cli.Command{
 func main() {
 	err := command.Run(os.Args[1:])
 	if err != nil {
-		log.Fatalln(err)
+		fmt.Fprintln(os.Stderr, err)
+		return
 	}
 }

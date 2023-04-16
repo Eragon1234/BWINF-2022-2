@@ -23,6 +23,6 @@ var Aufgabe3 = cli.Command{
 var aufgabe3Flags = flag.NewFlagSet("aufgabe3", flag.ExitOnError)
 
 func init() {
-	aufgabe3Flags.BoolVar(&pancake.KeepTrackOfSide, "keepTrackOfSide", false, "Ob am Schluss der Stack zur selben Seite zeigen soll")
+	aufgabe3Flags.BoolVar(&pancake.KeepTrackOfSide, "keepTrackOfSide", false, "Ob alle Pfannkuchen auf der selben Seite wie am Anfang liegen sollen")
 	aufgabe3Flags.IntVar(&sort.WorkerCount, "workerCount", runtime.NumCPU(), "Anzahl der Worker die gleichzeitig arbeiten sollen")
 }
