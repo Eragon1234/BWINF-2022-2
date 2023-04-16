@@ -2,6 +2,7 @@ package sort
 
 import (
 	"BWINF/Aufgabe3/pancake"
+	mySync "BWINF/utils/sync"
 	"BWINF/utils/sync/atomic"
 	"runtime"
 	"sync"
@@ -11,8 +12,14 @@ func BruteForceMultiGoroutine(p pancake.Stack) pancake.SortSteps {
 	var helper func(*sync.WaitGroup, State)
 	var wg sync.WaitGroup
 	var shortest atomic.Value[string]
+	var visited mySync.Set[string]
 
 	pushNew := func(state State) {
+		stackString := state.Stack.String()
+		if visited.Contains(stackString) {
+			return
+		}
+		visited.Add(stackString)
 		wg.Add(1)
 		go helper(&wg, state)
 	}

@@ -26,9 +26,9 @@ func doState(state State, pushNew func(State), pushSolution func(steps pancake.S
 		return
 	}
 
-	if negativeCount == 0 {
-		p = p[nonSortedIndex:]
-	}
+	//if negativeCount == 0 {
+	//	p = p[nonSortedIndex:]
+	//}
 
 	if lenOfSteps-1 >= getShortestLength() {
 		return

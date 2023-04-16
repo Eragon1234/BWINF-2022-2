@@ -15,6 +15,7 @@ func BruteForceMultiGoroutineAstar(p pancake.Stack) pancake.SortSteps {
 	var wg sync.WaitGroup
 	var shortest atomic.Value[string]
 	var pq mySync.PriorityQueue[State]
+	var visited mySync.Set[string]
 
 	if !pancake.KeepTrackOfSide {
 		// setting the shortest by default to my sort algorithm because it is a possible sort path
@@ -26,6 +27,29 @@ func BruteForceMultiGoroutineAstar(p pancake.Stack) pancake.SortSteps {
 		Steps: &pancake.SortSteps{},
 	}, cost(p))
 
+	getNext := func() (State, bool) {
+		return pq.Pop()
+	}
+
+	pushNew := func(state State) {
+		stackString := state.Stack.String()
+		if visited.Contains(stackString) {
+			return
+		}
+		visited.Add(stackString)
+		pq.Push(state, cost(*state.Stack))
+	}
+
+	pushSolution := func(steps pancake.SortSteps) {
+		stepsString := steps.String()
+		for s := shortest.Load(); (s == "" || len(steps) < lenOfStepsString(s)) && !shortest.CompareAndSwap(s, stepsString); s = shortest.Load() {
+			runtime.Gosched()
+		}
+	}
+
+	getShortestLength := func() int {
+		return lenOfStepsString(shortest.Load())
+	}
 	run := true
 
 	workerCount := runtime.NumCPU()
@@ -36,7 +60,7 @@ func BruteForceMultiGoroutineAstar(p pancake.Stack) pancake.SortSteps {
 	})
 	for i := 0; i < workerCount && run; i++ {
 		wg.Add(1)
-		go worker(&wg, &run, waiting[i], &pq, &shortest)
+		go worker(&wg, &run, waiting[i], getNext, pushNew, pushSolution, getShortestLength)
 	}
 
 	for slice.CountFunc(waiting, func(b *bool) bool { return *b }) != len(waiting) || pq.Len() != 0 {
@@ -58,27 +82,12 @@ func BruteForceMultiGoroutineAstar(p pancake.Stack) pancake.SortSteps {
 	return sortSteps
 }
 
-func worker(wg *sync.WaitGroup, run, waiting *bool, pq *mySync.PriorityQueue[State], shortest *atomic.Value[string]) {
+func worker(wg *sync.WaitGroup, run, waiting *bool, getNext func() (State, bool), pushNew func(State), pushSolution func(pancake.SortSteps), getShortestLength func() int) {
 	defer wg.Done()
-
-	pushNew := func(state State) {
-		pq.Push(state, cost(*state.Stack))
-	}
-
-	pushSolution := func(steps pancake.SortSteps) {
-		stepsString := steps.String()
-		for s := shortest.Load(); (s == "" || len(steps) < lenOfStepsString(s)) && !shortest.CompareAndSwap(s, stepsString); s = shortest.Load() {
-			runtime.Gosched()
-		}
-	}
-
-	getShortestLength := func() int {
-		return lenOfStepsString(shortest.Load())
-	}
 
 	for *run {
 		*waiting = true
-		state, ok := pq.Pop()
+		state, ok := getNext()
 		if !ok {
 			continue
 		}
