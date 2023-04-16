@@ -2,7 +2,7 @@ package sort
 
 import (
 	"BWINF/Aufgabe3/pancake"
-	"BWINF/utils/slice"
+	"BWINF/pkg/slice"
 )
 
 // cost returns the cost of a given pancake stack.

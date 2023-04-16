@@ -2,9 +2,9 @@ package graph
 
 import (
 	"BWINF/Aufgabe1/vector"
-	"BWINF/utils"
-	"BWINF/utils/set"
-	"BWINF/utils/slice"
+	"BWINF/pkg"
+	"BWINF/pkg/set"
+	"BWINF/pkg/slice"
 	"fmt"
 	"math/rand"
 	"os"
@@ -128,7 +128,7 @@ func chooseNextEdgeWeighted(cfg Config, edges []Edge[PheromoneDistanceAngle, vec
 	for i, e := range edges {
 		weights[i] = e.Weight.Pheromone * cfg.PheromoneWeight / (e.Weight.DistanceAngle.Distance * cfg.DistanceWeight)
 	}
-	n := utils.ChooseWeighted(weights)
+	n := pkg.ChooseWeighted(weights)
 	return edges[n]
 }
 

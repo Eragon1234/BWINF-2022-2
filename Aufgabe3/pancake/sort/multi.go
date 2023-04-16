@@ -2,8 +2,8 @@ package sort
 
 import (
 	"BWINF/Aufgabe3/pancake"
-	mySync "BWINF/utils/sync"
-	"BWINF/utils/sync/atomic"
+	mySync "BWINF/pkg/sync"
+	"BWINF/pkg/sync/atomic"
 	"runtime"
 	"sync"
 )

@@ -4,7 +4,7 @@ import (
 	"BWINF/Aufgabe3/pancake"
 	"BWINF/Aufgabe3/pancake/sort"
 	"BWINF/cli"
-	"BWINF/utils/set"
+	"BWINF/pkg/set"
 	"bufio"
 	"errors"
 	"fmt"

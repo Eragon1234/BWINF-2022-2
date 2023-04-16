@@ -2,9 +2,9 @@ package sort
 
 import (
 	"BWINF/Aufgabe3/pancake"
-	"BWINF/utils/slice"
-	mySync "BWINF/utils/sync"
-	"BWINF/utils/sync/atomic"
+	"BWINF/pkg/slice"
+	mySync "BWINF/pkg/sync"
+	"BWINF/pkg/sync/atomic"
 	"runtime"
 	"strings"
 	"sync"

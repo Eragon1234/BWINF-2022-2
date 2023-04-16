@@ -1,14 +1,14 @@
 package pancake
 
 import (
-	"BWINF/utils"
+	"BWINF/pkg"
 	"reflect"
 	"testing"
 )
 
 func TestSortSteps_Push(t *testing.T) {
 	type args struct {
-		i int
+		i int8
 	}
 	tests := []struct {
 		name string
@@ -74,7 +74,7 @@ func TestSortSteps_Copy(t *testing.T) {
 }
 
 func TestSortSteps_String(t *testing.T) {
-	type testCase[T utils.Number] struct {
+	type testCase[T pkg.Number] struct {
 		name string
 		s    SortSteps
 		want string
@@ -109,7 +109,7 @@ func TestParseSortSteps(t *testing.T) {
 	type args struct {
 		s string
 	}
-	type testCase[T utils.Number] struct {
+	type testCase[T pkg.Number] struct {
 		name string
 		args args
 		want SortSteps

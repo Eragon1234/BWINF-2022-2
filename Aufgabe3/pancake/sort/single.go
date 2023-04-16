@@ -2,8 +2,8 @@ package sort
 
 import (
 	"BWINF/Aufgabe3/pancake"
-	"BWINF/utils/queue"
-	"BWINF/utils/set"
+	"BWINF/pkg/queue"
+	"BWINF/pkg/set"
 	"math"
 )
 

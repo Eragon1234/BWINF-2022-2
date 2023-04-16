@@ -1,4 +1,4 @@
-package utils
+package pkg
 
 // Min returns the smaller of the two values.
 // If a and b are equal, b is returned.

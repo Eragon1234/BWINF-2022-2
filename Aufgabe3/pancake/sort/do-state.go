@@ -2,7 +2,7 @@ package sort
 
 import (
 	"BWINF/Aufgabe3/pancake"
-	"BWINF/utils/slice"
+	"BWINF/pkg/slice"
 )
 
 // doState does the algorithm for a given state

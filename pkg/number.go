@@ -1,4 +1,4 @@
-package utils
+package pkg
 
 type Number interface {
 	UnsignedNumber | SignedNumber | FloatNumber

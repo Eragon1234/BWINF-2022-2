@@ -2,7 +2,7 @@ package sort
 
 import (
 	"BWINF/Aufgabe3/pancake"
-	"BWINF/utils/slice"
+	"BWINF/pkg/slice"
 )
 
 // FlipAfterBiggest flips at the position after the biggest number and then the biggest number to the bottom

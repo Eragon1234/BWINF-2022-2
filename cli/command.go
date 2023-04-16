@@ -1,8 +1,8 @@
 package cli
 
 import (
-	"BWINF/utils/set"
-	"BWINF/utils/slice"
+	"BWINF/pkg/set"
+	"BWINF/pkg/slice"
 	"flag"
 	"fmt"
 	"sort"

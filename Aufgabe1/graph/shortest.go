@@ -2,8 +2,8 @@ package graph
 
 import (
 	"BWINF/Aufgabe1/vector"
-	"BWINF/utils/set"
-	"BWINF/utils/slice"
+	"BWINF/pkg/set"
+	"BWINF/pkg/slice"
 )
 
 func VisitAllShortestEdge(g WeightedGraph[vector.Coordinate, DistanceAngle]) []Edge[DistanceAngle, vector.Coordinate] {

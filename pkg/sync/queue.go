@@ -1,7 +1,7 @@
 package sync
 
 import (
-	"BWINF/utils/queue"
+	"BWINF/pkg/queue"
 	"sync"
 )
 

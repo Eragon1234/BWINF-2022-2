@@ -1,7 +1,7 @@
 package pancake
 
 import (
-	"BWINF/utils/slice"
+	"BWINF/pkg/slice"
 	"bufio"
 	"io"
 	"strconv"
