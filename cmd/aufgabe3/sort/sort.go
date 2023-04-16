@@ -46,7 +46,7 @@ func sortPancake(args []string, _ *cli.Command) error {
 	if err != nil {
 		return err
 	}
-	sortSteps := sort.BruteForceMultiGoroutineInline(stack)
+	sortSteps := sort.BruteForceInlined(stack)
 	printStackAndSortSteps(stack, sortSteps)
 	return nil
 }

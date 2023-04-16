@@ -10,7 +10,8 @@ import (
 	"sync"
 )
 
-func BruteForceMultiGoroutineInline(p pancake.Stack) pancake.SortSteps {
+// BruteForceInlined is an inlined version of BruteForce.
+func BruteForceInlined(p pancake.Stack) pancake.SortSteps {
 	var helper func(*sync.WaitGroup, *atomic.Value[string], *mySync.Set[string], pancake.Stack, pancake.SortSteps)
 	helper = func(wg *sync.WaitGroup, shortest *atomic.Value[string], visited *mySync.Set[string], p pancake.Stack, steps pancake.SortSteps) {
 		defer wg.Done()
