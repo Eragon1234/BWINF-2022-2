@@ -86,7 +86,7 @@ func doStack(item State, pq *mySync.PriorityQueue[State], shortest *atomic.Value
 	nonSortedIndex := slice.NonSortedIndex(p)
 	var negativeCount int
 	if pancake.KeepTrackOfSide {
-		negativeCount = slice.CountFunc(p, func(i int8) bool { return i < 0 })
+		negativeCount = slice.CountFunc(p, func(i int) bool { return i < 0 })
 	}
 	// when sorted index is -1 the stack is sorted
 	if nonSortedIndex == -1 && negativeCount == 0 {
@@ -103,28 +103,28 @@ func doStack(item State, pq *mySync.PriorityQueue[State], shortest *atomic.Value
 		return
 	}
 
-	// updating the stack to only contain the unsorted pancakes because we can ignore the sorted ones
+	// updating the stack to only contain the unsorted pancakes because we can ignore the sorted ones,
 	// it won't affect the indexes because we are counting the flip index from the top of the stack
 	p = p[nonSortedIndex:]
 
 	// running the for loop in reverse because I think that flipping more pancakes has a higher chance of sorting the stack
 	for i := len(p); i >= 0; i-- {
-		newP := p.Copy().Flip(int8(i))
+		newP := p.Copy().Flip(i)
 		pq.Push(State{
 			Stack: newP,
-			Steps: steps.Copy().Push(int8(i)),
+			Steps: steps.Copy().Push(i),
 		}, cost(*newP))
 	}
 }
 
-func cost(p pancake.Stack) uint8 {
+func cost(p pancake.Stack) int {
 	if len(p) == 0 {
 		return 0
 	}
 	if len(p) < 3 {
-		return uint8(len(p))
+		return len(p)
 	}
-	var count uint8 = 1
+	var count = 1
 	reducing := p[0] > p[1]
 	for i := 1; i < len(p)-1; i++ {
 		if p[i] > p[i+1] != reducing {
@@ -134,7 +134,7 @@ func cost(p pancake.Stack) uint8 {
 			}
 		}
 	}
-	return count + uint8(len(p))
+	return count + len(p)
 }
 
 func lenOfStepsString(s string) int {

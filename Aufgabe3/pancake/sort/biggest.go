@@ -13,16 +13,16 @@ func FlipAfterBiggest(p pancake.Stack) pancake.SortSteps {
 			break
 		}
 		i = len(p) - i + 1
-		sortSteps.Push(int8(i))
-		p.Flip(int8(i))
+		sortSteps.Push(int(i))
+		p.Flip(int(i))
 
 		nsi := slice.NonSortedIndex(p)
 		if nsi == -1 {
 			break
 		}
 		nsi = len(p) - nsi
-		sortSteps.Push(int8(nsi))
-		p.Flip(int8(nsi))
+		sortSteps.Push(int(nsi))
+		p.Flip(int(nsi))
 	}
 	return sortSteps
 }

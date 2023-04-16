@@ -7,7 +7,7 @@ import (
 )
 
 // SortSteps is a slice of steps to sort a pancake
-type SortSteps []int8
+type SortSteps []int
 
 func ParseSortSteps(s string) SortSteps {
 	var sortSteps SortSteps
@@ -16,19 +16,19 @@ func ParseSortSteps(s string) SortSteps {
 			continue
 		}
 		step, _ := strconv.Atoi(line)
-		sortSteps = append(sortSteps, int8(step))
+		sortSteps = append(sortSteps, int(step))
 	}
 	return sortSteps
 }
 
 func (s SortSteps) String() string {
-	stringSteps := slice.Map(s, func(e int8) string {
+	stringSteps := slice.Map(s, func(e int) string {
 		return strconv.Itoa(int(e))
 	})
 	return strings.Join(stringSteps, " ")
 }
 
-func (s *SortSteps) Push(e int8) *SortSteps {
+func (s *SortSteps) Push(e int) *SortSteps {
 	*s = append(*s, e)
 	return s
 }

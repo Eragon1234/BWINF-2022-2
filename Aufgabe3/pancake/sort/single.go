@@ -29,7 +29,7 @@ func BruteForce(p pancake.Stack) pancake.SortSteps {
 		nonSortedIndex := slice.NonSortedIndex(p)
 		var negativeCount int
 		if pancake.KeepTrackOfSide {
-			negativeCount = slice.CountFunc(*state.Stack, func(i int8) bool { return i < 0 })
+			negativeCount = slice.CountFunc(*state.Stack, func(i int) bool { return i < 0 })
 		}
 
 		if nonSortedIndex == -1 && negativeCount == 0 {
@@ -39,13 +39,13 @@ func BruteForce(p pancake.Stack) pancake.SortSteps {
 
 		for i := len(*state.Stack); i >= 0; i-- {
 			newStack := *state.Stack.Copy()
-			newStack.Flip(int8(i))
+			newStack.Flip(i)
 			newSteps := *state.Steps.Copy()
-			newSteps.Push(int8(i))
+			newSteps.Push(i)
 			pq.Push(State{
 				Stack: &newStack,
 				Steps: &newSteps,
-			}, uint8(len(newSteps)))
+			}, cost(newStack))
 		}
 	}
 

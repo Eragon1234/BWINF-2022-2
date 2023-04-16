@@ -24,7 +24,7 @@ func BruteForceMultiGoroutine(p pancake.Stack) pancake.SortSteps {
 		nonSortedIndex := slice.NonSortedIndex(p)
 		var negativeCount int
 		if pancake.KeepTrackOfSide {
-			negativeCount = slice.CountFunc(p, func(e int8) bool {
+			negativeCount = slice.CountFunc(p, func(e int) bool {
 				return e < 0
 			})
 		}
@@ -56,7 +56,7 @@ func BruteForceMultiGoroutine(p pancake.Stack) pancake.SortSteps {
 			if i == 1 {
 				newP = *p.Flip(1)
 			} else {
-				newP = *p.Copy().Flip(int8(i))
+				newP = *p.Copy().Flip(i)
 			}
 			newPString := newP.String()
 
@@ -68,7 +68,7 @@ func BruteForceMultiGoroutine(p pancake.Stack) pancake.SortSteps {
 			visited.Add(newPString)
 
 			wg.Add(1)
-			go helper(wg, shortest, visited, newP, *steps.Copy().Push(int8(i)))
+			go helper(wg, shortest, visited, newP, *steps.Copy().Push(i))
 		}
 	}
 

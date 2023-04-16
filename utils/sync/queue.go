@@ -11,7 +11,7 @@ type PriorityQueue[T any] struct {
 	pg queue.PriorityQueue[T]
 }
 
-func (pq *PriorityQueue[T]) Push(val T, priority uint8) {
+func (pq *PriorityQueue[T]) Push(val T, priority int) {
 	pq.mu.Lock()
 	defer pq.mu.Unlock()
 	pq.pg.Push(val, priority)

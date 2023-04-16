@@ -12,25 +12,25 @@ func TestSortSteps_Push(t *testing.T) {
 	}
 	tests := []struct {
 		name string
-		p    SortSteps[int]
+		p    SortSteps
 		args args
-		want SortSteps[int]
+		want SortSteps
 	}{
 		{
 			name: "push step on empty",
-			p:    SortSteps[int]{},
+			p:    SortSteps{},
 			args: args{
 				i: 1,
 			},
-			want: SortSteps[int]{1},
+			want: SortSteps{1},
 		},
 		{
 			name: "push step on non empty",
-			p:    SortSteps[int]{1, 2, 3},
+			p:    SortSteps{1, 2, 3},
 			args: args{
 				i: 4,
 			},
-			want: SortSteps[int]{1, 2, 3, 4},
+			want: SortSteps{1, 2, 3, 4},
 		},
 	}
 	for _, tt := range tests {
@@ -48,13 +48,13 @@ func TestSortSteps_Push(t *testing.T) {
 func TestSortSteps_Copy(t *testing.T) {
 	tests := []struct {
 		name string
-		p    SortSteps[int]
-		want SortSteps[int]
+		p    SortSteps
+		want SortSteps
 	}{
 		{
 			name: "testing copy",
-			p:    SortSteps[int]{1, 2, 3},
-			want: SortSteps[int]{1, 2, 3},
+			p:    SortSteps{1, 2, 3},
+			want: SortSteps{1, 2, 3},
 		},
 	}
 	for _, tt := range tests {
@@ -76,23 +76,23 @@ func TestSortSteps_Copy(t *testing.T) {
 func TestSortSteps_String(t *testing.T) {
 	type testCase[T utils.Number] struct {
 		name string
-		s    SortSteps[T]
+		s    SortSteps
 		want string
 	}
 	tests := []testCase[int]{
 		{
 			name: "testing empty",
-			s:    SortSteps[int]{},
+			s:    SortSteps{},
 			want: "",
 		},
 		{
 			name: "testing one digit numbers",
-			s:    SortSteps[int]{1, 2, 3},
+			s:    SortSteps{1, 2, 3},
 			want: "1 2 3",
 		},
 		{
 			name: "testing two digit numbers",
-			s:    SortSteps[int]{10, 20, 30},
+			s:    SortSteps{10, 20, 30},
 			want: "10 20 30",
 		},
 	}
@@ -112,7 +112,7 @@ func TestParseSortSteps(t *testing.T) {
 	type testCase[T utils.Number] struct {
 		name string
 		args args
-		want SortSteps[T]
+		want SortSteps
 	}
 	tests := []testCase[int]{
 		{
@@ -120,14 +120,14 @@ func TestParseSortSteps(t *testing.T) {
 			args: args{
 				s: "1",
 			},
-			want: SortSteps[int]{1},
+			want: SortSteps{1},
 		},
 		{
 			name: "testing multiple numbers",
 			args: args{
 				s: "1 2 3",
 			},
-			want: SortSteps[int]{1, 2, 3},
+			want: SortSteps{1, 2, 3},
 		},
 	}
 	for _, tt := range tests {
