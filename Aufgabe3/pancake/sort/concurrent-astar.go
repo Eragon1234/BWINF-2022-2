@@ -3,7 +3,7 @@ package sort
 import (
 	"BWINF/Aufgabe3/pancake"
 	"BWINF/pkg/slice"
-	sync2 "BWINF/pkg/sync"
+	mySync "BWINF/pkg/sync"
 	"BWINF/pkg/sync/atomic"
 	"math"
 	"runtime"
@@ -15,8 +15,8 @@ import (
 func concurrentAstar(p pancake.Stack) pancake.SortSteps {
 	var wg sync.WaitGroup
 	var shortest atomic.Value[string]
-	var pq sync2.PriorityQueue[State]
-	var visited sync2.Set[string]
+	var pq mySync.PriorityQueue[State]
+	var visited mySync.Set[string]
 
 	if !pancake.KeepTrackOfSide {
 		// setting the shortest by default to my sort algorithm because it is a possible sort path
