@@ -4,18 +4,13 @@ import (
 	"BWINF/Aufgabe3/pancake"
 	"BWINF/Aufgabe3/pancake/sort"
 	"BWINF/cli"
-	"BWINF/pkg/set"
 	"errors"
 	"io/fs"
 	"os"
 )
 
 var Astar = cli.Command{
-	Name: "astar",
-	Aliases: *set.FromSlice([]string{
-		"a*",
-		"A*",
-	}),
+	Name:        "astar",
 	Usage:       "astar <filename>",
 	Description: "Berechnet den Sortierweg für den Stack in der Datei mit A*",
 	Action:      sortAstar,
@@ -43,7 +38,7 @@ func sortAstar(args []string, _ *cli.Command) error {
 	if err != nil {
 		return err
 	}
-	sortSteps := sort.BruteForceMultiGoroutineAstar(p)
+	sortSteps := sort.Astar(p)
 	printStackAndSortSteps(p, sortSteps)
 	return nil
 }

@@ -7,7 +7,7 @@ import (
 
 func benchmarkBruteForceSort(input pancake.Stack, b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		BruteForce(input)
+		singleThreadedAstar(input)
 	}
 }
 

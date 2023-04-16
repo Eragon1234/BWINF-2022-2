@@ -11,8 +11,19 @@ import (
 	"time"
 )
 
-// BruteForceMultiGoroutineAstar is a brute force algorithm that uses multiple goroutines to find the shortest sort path using the A* algorithm
-func BruteForceMultiGoroutineAstar(p pancake.Stack) pancake.SortSteps {
+var WorkerCount = runtime.NumCPU()
+
+// Astar calls singleThreadedAstar if WorkerCount is 1 otherwise it calls multiThreadedAstar
+func Astar(p pancake.Stack) pancake.SortSteps {
+	if WorkerCount == 1 {
+		return singleThreadedAstar(p)
+	}
+	return multiThreadedAstar(p)
+}
+
+// multiThreadedAstar is a brute force algorithm
+// that uses multiple goroutines to find the shortest sort path using the A* algorithm
+func multiThreadedAstar(p pancake.Stack) pancake.SortSteps {
 	var wg sync.WaitGroup
 	var shortest atomic.Value[string]
 	var pq mySync.PriorityQueue[State]
@@ -58,14 +69,13 @@ func BruteForceMultiGoroutineAstar(p pancake.Stack) pancake.SortSteps {
 
 	run := true
 
-	workerCount := runtime.NumCPU()
-
-	waiting := slice.MakeFunc(workerCount, func(i int) *bool {
+	waiting := slice.MakeFunc(WorkerCount, func(i int) *bool {
 		b := false
 		return &b
 	})
-	for i := 0; i < workerCount && run; i++ {
-		wg.Add(1)
+
+	wg.Add(WorkerCount)
+	for i := 0; i < WorkerCount; i++ {
 		go worker(&wg, &run, waiting[i], getNext, pushNew, pushSolution, getShortestLength)
 	}
 
