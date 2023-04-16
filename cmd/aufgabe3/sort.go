@@ -40,9 +40,9 @@ func sortPancake(args []string, c *cli.Command) error {
 		return err
 	}
 	fmt.Printf("Stack: %v\n", stack)
-	sortSteps := sort.BruteForceMultiGoroutine(stack)
+	sortSteps := sort.BruteForceMultiGoroutineInline(stack)
 	for _, step := range sortSteps {
-		fmt.Printf("flip bei %v, neuer Stack %v\n", step, stack.Flip(step))
+		fmt.Printf("flip bei %v, neuer Stack %v\n", step, stack.Flip(int(step)))
 	}
 	return nil
 }
