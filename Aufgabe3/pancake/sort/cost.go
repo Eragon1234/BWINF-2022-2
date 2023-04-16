@@ -7,9 +7,12 @@ import (
 
 // cost returns the cost of a given pancake stack.
 func cost(p pancake.Stack) int {
-	negativeCount := slice.CountFunc(p, func(i int8) bool { return i < 0 })
+	var negativeCount int
+	if pancake.KeepTrackOfSide {
+		negativeCount = slice.CountFunc(p, func(i int8) bool { return i < 0 })
+	}
 	if len(p) < 3 {
-		return len(p) + negativeCount
+		return negativeCount
 	}
 	var count = 1
 	reducing := p[0] > p[1]
@@ -21,5 +24,5 @@ func cost(p pancake.Stack) int {
 			}
 		}
 	}
-	return count + len(p) + negativeCount
+	return count + negativeCount
 }
