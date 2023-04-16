@@ -6,7 +6,6 @@ import (
 	mySync "BWINF/utils/sync"
 	"BWINF/utils/sync/atomic"
 	"runtime"
-	"strings"
 	"sync"
 	"time"
 )
@@ -42,13 +41,13 @@ func BruteForceMultiGoroutineAstar(p pancake.Stack) pancake.SortSteps {
 
 	pushSolution := func(steps pancake.SortSteps) {
 		stepsString := steps.String()
-		for s := shortest.Load(); (s == "" || len(steps) < lenOfStepsString(s)) && !shortest.CompareAndSwap(s, stepsString); s = shortest.Load() {
+		for s := shortest.Load(); (s == "" || len(steps) < pancake.LenOfSortStepsString(s)) && !shortest.CompareAndSwap(s, stepsString); s = shortest.Load() {
 			runtime.Gosched()
 		}
 	}
 
 	getShortestLength := func() int {
-		return lenOfStepsString(shortest.Load())
+		return pancake.LenOfSortStepsString(shortest.Load())
 	}
 	run := true
 
@@ -94,8 +93,4 @@ func worker(wg *sync.WaitGroup, run, waiting *bool, getNext func() (State, bool)
 		*waiting = false
 		doState(state, pushNew, pushSolution, getShortestLength)
 	}
-}
-
-func lenOfStepsString(s string) int {
-	return strings.Count(s, " ") + 1
 }

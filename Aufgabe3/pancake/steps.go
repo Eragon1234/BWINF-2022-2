@@ -21,6 +21,10 @@ func ParseSortSteps(s string) SortSteps {
 	return sortSteps
 }
 
+func LenOfSortStepsString(s string) int {
+	return strings.Count(s, " ") + 1
+}
+
 func (s SortSteps) String() string {
 	stringSteps := slice.Map(s, func(e int8) string {
 		return strconv.Itoa(int(e))

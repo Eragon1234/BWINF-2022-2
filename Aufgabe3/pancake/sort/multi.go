@@ -26,13 +26,13 @@ func BruteForceMultiGoroutine(p pancake.Stack) pancake.SortSteps {
 
 	pushSolution := func(steps pancake.SortSteps) {
 		stepsString := steps.String()
-		for s := shortest.Load(); (s == "" || len(steps) < lenOfStepsString(s)) && !shortest.CompareAndSwap(s, stepsString); s = shortest.Load() {
+		for s := shortest.Load(); (s == "" || len(steps) < pancake.LenOfSortStepsString(s)) && !shortest.CompareAndSwap(s, stepsString); s = shortest.Load() {
 			runtime.Gosched()
 		}
 	}
 
 	getShortestLength := func() int {
-		return lenOfStepsString(shortest.Load())
+		return pancake.LenOfSortStepsString(shortest.Load())
 	}
 
 	helper = func(wg *sync.WaitGroup, state State) {
