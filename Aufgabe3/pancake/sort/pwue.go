@@ -6,6 +6,7 @@ import (
 	"BWINF/utils/slice"
 )
 
+// CalculatePWUE calculates PWUE for a pancake of size n.
 func CalculatePWUE(n int) (stack pancake.Stack, sortSteps pancake.SortSteps) {
 	if n == 0 {
 		return pancake.Stack{}, pancake.SortSteps{}

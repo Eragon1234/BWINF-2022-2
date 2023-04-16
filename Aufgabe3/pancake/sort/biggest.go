@@ -5,6 +5,7 @@ import (
 	"BWINF/utils/slice"
 )
 
+// FlipAfterBiggest flips at the position after the biggest number and then the biggest number to the bottom
 func FlipAfterBiggest(p pancake.Stack) pancake.SortSteps {
 	var sortSteps pancake.SortSteps
 	for slice.IndexOfBiggestNonSortedNumber(p) != 0 {

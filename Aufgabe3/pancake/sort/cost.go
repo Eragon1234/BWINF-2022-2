@@ -5,6 +5,7 @@ import (
 	"BWINF/utils/slice"
 )
 
+// cost returns the cost of a given pancake stack.
 func cost(p pancake.Stack) int {
 	negativeCount := slice.CountFunc(p, func(i int8) bool { return i < 0 })
 	if len(p) < 3 {

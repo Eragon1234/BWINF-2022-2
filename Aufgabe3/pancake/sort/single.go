@@ -7,6 +7,7 @@ import (
 	"math"
 )
 
+// BruteForce is a single goroutine implementation of A* to find the shortest path to sort a pancake stack
 func BruteForce(p pancake.Stack) pancake.SortSteps {
 	var shortest pancake.SortSteps
 	pq := queue.PriorityQueue[State]{}

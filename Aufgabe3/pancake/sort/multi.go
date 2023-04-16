@@ -8,6 +8,7 @@ import (
 	"sync"
 )
 
+// BruteForceMultiGoroutine brute forces the sorting of a pancake stack with multiple goroutines
 func BruteForceMultiGoroutine(p pancake.Stack) pancake.SortSteps {
 	var helper func(*sync.WaitGroup, State)
 	var wg sync.WaitGroup

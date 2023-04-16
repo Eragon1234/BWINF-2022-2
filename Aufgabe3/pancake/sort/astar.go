@@ -10,6 +10,7 @@ import (
 	"time"
 )
 
+// BruteForceMultiGoroutineAstar is a brute force algorithm that uses multiple goroutines to find the shortest sort path using the A* algorithm
 func BruteForceMultiGoroutineAstar(p pancake.Stack) pancake.SortSteps {
 	var wg sync.WaitGroup
 	var shortest atomic.Value[string]
@@ -49,6 +50,7 @@ func BruteForceMultiGoroutineAstar(p pancake.Stack) pancake.SortSteps {
 	getShortestLength := func() int {
 		return pancake.LenOfSortStepsString(shortest.Load())
 	}
+
 	run := true
 
 	workerCount := runtime.NumCPU()

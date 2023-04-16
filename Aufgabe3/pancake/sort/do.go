@@ -5,6 +5,7 @@ import (
 	"BWINF/utils/slice"
 )
 
+// doState does the algorithm for a given state
 func doState(state State, pushNew func(State), pushSolution func(steps pancake.SortSteps), getShortestLength func() int) {
 	p := *state.Stack
 	steps := *state.Steps
@@ -24,10 +25,6 @@ func doState(state State, pushNew func(State), pushSolution func(steps pancake.S
 	if nonSortedIndex == -1 && negativeCount == 0 {
 		pushSolution(steps)
 		return
-	}
-
-	if negativeCount == 0 {
-		p = p[nonSortedIndex:]
 	}
 
 	if lenOfSteps-1 >= getShortestLength() {
