@@ -7,8 +7,8 @@ import (
 	"math"
 )
 
-// singleThreadedAstar is a single goroutine implementation of A* to find the shortest path to sort a pancake stack
-func singleThreadedAstar(p pancake.Stack) pancake.SortSteps {
+// sequentialAstar is a single goroutine implementation of A* to find the shortest path to sort a pancake stack
+func sequentialAstar(p pancake.Stack) pancake.SortSteps {
 	var shortest pancake.SortSteps
 	pq := queue.PriorityQueue[State]{}
 	pq.Push(State{
