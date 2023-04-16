@@ -40,8 +40,8 @@ func BruteForceMultiGoroutineAstar(p pancake.Stack) pancake.SortSteps {
 	}
 
 	for slice.CountFunc(waiting, func(b *bool) bool { return *b }) != len(waiting) || pq.Len() != 0 {
-		time.Sleep(time.Millisecond * 500)
 		runtime.Gosched()
+		time.Sleep(time.Millisecond * 500)
 	}
 
 	run = false
@@ -115,26 +115,6 @@ func doStack(item State, pq *mySync.PriorityQueue[State], shortest *atomic.Value
 			Steps: steps.Copy().Push(i),
 		}, cost(*newP))
 	}
-}
-
-func cost(p pancake.Stack) int {
-	if len(p) == 0 {
-		return 0
-	}
-	if len(p) < 3 {
-		return len(p)
-	}
-	var count = 1
-	reducing := p[0] > p[1]
-	for i := 1; i < len(p)-1; i++ {
-		if p[i] > p[i+1] != reducing {
-			count++
-			if i+2 < len(p) {
-				reducing = p[i+1] > p[i+2]
-			}
-		}
-	}
-	return count + len(p)
 }
 
 func lenOfStepsString(s string) int {
