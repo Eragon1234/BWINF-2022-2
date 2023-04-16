@@ -7,7 +7,7 @@ import (
 
 func benchmarkBruteForceSortMultiGoroutine(input pancake.Stack, b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		BruteForceMultiGoroutine(input)
+		BruteForceMultiGoroutineAstar(input)
 	}
 }
 
