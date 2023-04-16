@@ -61,6 +61,21 @@ func BruteForceMultiGoroutineAstar(p pancake.Stack) pancake.SortSteps {
 func worker(wg *sync.WaitGroup, run, waiting *bool, pq *mySync.PriorityQueue[State], shortest *atomic.Value[string]) {
 	defer wg.Done()
 
+	pushNew := func(state State) {
+		pq.Push(state, cost(*state.Stack))
+	}
+
+	pushSolution := func(steps pancake.SortSteps) {
+		stepsString := steps.String()
+		for s := shortest.Load(); (s == "" || len(steps) < lenOfStepsString(s)) && !shortest.CompareAndSwap(s, stepsString); s = shortest.Load() {
+			runtime.Gosched()
+		}
+	}
+
+	getShortestLength := func() int {
+		return lenOfStepsString(shortest.Load())
+	}
+
 	for *run {
 		*waiting = true
 		state, ok := pq.Pop()
@@ -68,52 +83,7 @@ func worker(wg *sync.WaitGroup, run, waiting *bool, pq *mySync.PriorityQueue[Sta
 			continue
 		}
 		*waiting = false
-		doStack(state, pq, shortest)
-	}
-}
-
-func doStack(item State, pq *mySync.PriorityQueue[State], shortest *atomic.Value[string]) {
-	p := *item.Stack
-	steps := *item.Steps
-
-	lenOfSteps := len(steps)
-
-	// check current steps length is greater than or equal to the smallest steps in done
-	if s := shortest.Load(); s != "" && lenOfSteps >= lenOfStepsString(s) {
-		return
-	}
-
-	nonSortedIndex := slice.NonSortedIndex(p)
-	var negativeCount int
-	if pancake.KeepTrackOfSide {
-		negativeCount = slice.CountFunc(p, func(i int) bool { return i < 0 })
-	}
-	// when sorted index is -1 the stack is sorted
-	if nonSortedIndex == -1 && negativeCount == 0 {
-		stepsString := steps.String()
-		for s := shortest.Load(); s == "" || lenOfSteps < lenOfStepsString(s) && !shortest.CompareAndSwap(s, stepsString); s = shortest.Load() {
-			runtime.Gosched()
-		}
-		return
-	}
-
-	// check if the next iteration won't exit early because the current steps length is greater than or equal to the smallest steps in done
-	// exit early if the next iteration will exit early, to prevent the spawning unnecessary goroutines
-	if s := shortest.Load(); s != "" && lenOfSteps+1 >= lenOfStepsString(s) {
-		return
-	}
-
-	// updating the stack to only contain the unsorted pancakes because we can ignore the sorted ones,
-	// it won't affect the indexes because we are counting the flip index from the top of the stack
-	p = p[nonSortedIndex:]
-
-	// running the for loop in reverse because I think that flipping more pancakes has a higher chance of sorting the stack
-	for i := len(p); i >= 0; i-- {
-		newP := p.Copy().Flip(i)
-		pq.Push(State{
-			Stack: newP,
-			Steps: steps.Copy().Push(i),
-		}, cost(*newP))
+		doState(state, pushNew, pushSolution, getShortestLength)
 	}
 }
 

@@ -3,7 +3,7 @@ package sort
 import (
 	"BWINF/Aufgabe3/pancake"
 	"BWINF/utils/queue"
-	"BWINF/utils/slice"
+	"math"
 )
 
 func BruteForce(p pancake.Stack) pancake.SortSteps {
@@ -20,33 +20,26 @@ func BruteForce(p pancake.Stack) pancake.SortSteps {
 		shortest = baseShortest
 	}
 
+	pushNew := func(state State) {
+		pq.Push(state, cost(*state.Stack))
+	}
+
+	pushSolution := func(steps pancake.SortSteps) {
+		if shortest == nil || len(steps) < len(shortest) {
+			shortest = steps
+		}
+	}
+
+	getShortestLength := func() int {
+		if shortest == nil {
+			return math.MaxInt
+		}
+		return len(shortest)
+	}
+
 	for pq.Len() != 0 {
 		state, _ := pq.Pop() // won't be empty
-		if shortest != nil && len(*state.Steps) >= len(shortest) {
-			continue
-		}
-
-		nonSortedIndex := slice.NonSortedIndex(p)
-		var negativeCount int
-		if pancake.KeepTrackOfSide {
-			negativeCount = slice.CountFunc(*state.Stack, func(i int) bool { return i < 0 })
-		}
-
-		if nonSortedIndex == -1 && negativeCount == 0 {
-			shortest = *state.Steps
-			continue
-		}
-
-		for i := len(*state.Stack); i >= 0; i-- {
-			newStack := *state.Stack.Copy()
-			newStack.Flip(i)
-			newSteps := *state.Steps.Copy()
-			newSteps.Push(i)
-			pq.Push(State{
-				Stack: &newStack,
-				Steps: &newSteps,
-			}, cost(newStack))
-		}
+		doState(state, pushNew, pushSolution, getShortestLength)
 	}
 
 	return shortest
