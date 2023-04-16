@@ -9,7 +9,7 @@ import (
 )
 
 type Command struct {
-	subcommands []Command
+	Subcommands []Command
 	Flags       *flag.FlagSet
 	Name        string
 	Aliases     set.Set[string]
@@ -19,7 +19,7 @@ type Command struct {
 }
 
 func (c *Command) AddCommand(cmd Command) {
-	c.subcommands = append(c.subcommands, cmd)
+	c.Subcommands = append(c.Subcommands, cmd)
 }
 
 func (c *Command) Help() {
@@ -29,9 +29,9 @@ func (c *Command) Help() {
 		fmt.Println("Flags:")
 		c.Flags.PrintDefaults()
 	}
-	if len(c.subcommands) > 0 {
+	if len(c.Subcommands) > 0 {
 		fmt.Println("Subcommands:")
-		for _, command := range c.subcommands {
+		for _, command := range c.Subcommands {
 			fmt.Printf("  %v\n", command.Name)
 		}
 	}
@@ -42,7 +42,10 @@ func (c *Command) Run(args []string) error {
 		return args[i][0] == '-'
 	})
 	if c.Flags != nil {
-		c.Flags.Parse(args)
+		err := c.Flags.Parse(args)
+		if err != nil {
+			return err
+		}
 		args = c.Flags.Args()
 	}
 	// ignore flags
@@ -54,7 +57,7 @@ func (c *Command) Run(args []string) error {
 			c.Help()
 			return nil
 		}
-		for _, command := range c.subcommands {
+		for _, command := range c.Subcommands {
 			if command.Name == commands[0] || command.Aliases.Contains(commands[0]) {
 				return command.Run(slice.FilterFunc(args, func(arg string) bool {
 					return arg == commands[0]

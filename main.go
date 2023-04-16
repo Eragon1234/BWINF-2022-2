@@ -12,11 +12,10 @@ var command = cli.Command{
 	Name:        "BWINF",
 	Usage:       "BWINF <command> [args]",
 	Description: "BWINF",
-}
-
-func init() {
-	command.AddCommand(aufgabe1.Aufgabe1)
-	command.AddCommand(aufgabe3.Aufgabe3)
+	Subcommands: []cli.Command{
+		aufgabe1.Aufgabe1,
+		aufgabe3.Aufgabe3,
+	},
 }
 
 func main() {

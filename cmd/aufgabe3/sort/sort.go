@@ -1,11 +1,10 @@
-package aufgabe3
+package sort
 
 import (
 	"BWINF/Aufgabe3/pancake"
 	"BWINF/Aufgabe3/pancake/sort"
 	"BWINF/cli"
 	"BWINF/pkg/set"
-	"bufio"
 	"errors"
 	"fmt"
 	"io/fs"
@@ -20,9 +19,12 @@ var Sort = cli.Command{
 	}),
 	Description: "Berechnet den Sortierweg für den Stack in der Datei",
 	Action:      sortPancake,
+	Subcommands: []cli.Command{
+		Astar,
+	},
 }
 
-func sortPancake(args []string, c *cli.Command) error {
+func sortPancake(args []string, _ *cli.Command) error {
 	if len(args) == 0 {
 		return errors.New("keine Datei angegeben")
 	}
@@ -34,15 +36,24 @@ func sortPancake(args []string, c *cli.Command) error {
 	if err != nil {
 		return err
 	}
-	defer file.Close()
-	stack, err := pancake.ParseStack(bufio.NewReader(file))
+	defer func(file *os.File) {
+		err := file.Close()
+		if err != nil {
+			panic(err)
+		}
+	}(file)
+	stack, err := pancake.ParseStack(file)
 	if err != nil {
 		return err
 	}
-	fmt.Printf("Stack: %v\n", stack)
 	sortSteps := sort.BruteForceMultiGoroutineInline(stack)
-	for _, step := range sortSteps {
+	printStackAndSortSteps(stack, sortSteps)
+	return nil
+}
+
+func printStackAndSortSteps(stack pancake.Stack, steps pancake.SortSteps) {
+	fmt.Printf("Stack: %v\n", stack)
+	for _, step := range steps {
 		fmt.Printf("flip bei %v, neuer Stack %v\n", step, stack.Flip(int(step)))
 	}
-	return nil
 }
