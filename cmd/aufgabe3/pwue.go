@@ -1,7 +1,7 @@
 package aufgabe3
 
 import (
-	sort2 "BWINF/Aufgabe3/pancake/sort"
+	"BWINF/Aufgabe3/pancake/sort"
 	"BWINF/cli"
 	"errors"
 	"fmt"
@@ -15,7 +15,7 @@ var Pwue = cli.Command{
 	Action:      pwue,
 }
 
-func pwue(args []string, cmd *cli.Command) error {
+func pwue(args []string, _ *cli.Command) error {
 	if len(args) == 0 {
 		return errors.New("missing n")
 	}
@@ -23,10 +23,9 @@ func pwue(args []string, cmd *cli.Command) error {
 	if err != nil {
 		return errors.New("n muss eine Zahl sein")
 	}
-	stack, sortSteps := sort2.CalculatePWUE(n)
-	fmt.Println("PWUE Zahl für n =", n)
-	fmt.Println("Beispiel:")
-	fmt.Println(stack)
+	stack, sortSteps := sort.CalculatePWUE(n)
+	fmt.Printf("PWUE(%v) = %v\n", n, len(sortSteps))
+	fmt.Println("Beispiel Stack:", stack)
 	fmt.Printf("Sortierungs Schritte: %v\n", sortSteps)
 	return nil
 }
