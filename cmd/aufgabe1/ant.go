@@ -2,6 +2,7 @@ package aufgabe1
 
 import (
 	"BWINF/Aufgabe1/graph"
+	ant2 "BWINF/Aufgabe1/graph/ant"
 	"BWINF/cli"
 	"errors"
 	"fmt"
@@ -16,7 +17,7 @@ var Ant = cli.Command{
 	Action:      ant,
 }
 
-var cfg = graph.Config{
+var cfg = ant2.Config{
 	NumOfAnts:                    runtime.NumCPU() * 128,
 	NumOfIterations:              100_000,
 	RandomChance:                 0.6,
@@ -40,8 +41,8 @@ func ant(args []string, cmd *cli.Command) error {
 	if err != nil {
 		return err
 	}
-	path := graph.VisitAllAntColonyOptimization(cfg, g)
-	fmt.Println("Length of path:", graph.LengthOfPheromonePath(path))
+	path := ant2.VisitAllAntColonyOptimization(cfg, g)
+	fmt.Println("Length of path:", ant2.LengthOfPheromonePath(path))
 	for _, edge := range path {
 		fmt.Printf("%v -> %v\n", edge.From.Name, edge.To.Name)
 	}

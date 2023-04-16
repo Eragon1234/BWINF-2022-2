@@ -2,6 +2,7 @@ package optimize
 
 import (
 	"BWINF/Aufgabe1/graph"
+	"BWINF/Aufgabe1/graph/ant"
 	"BWINF/Aufgabe1/vector"
 	"fmt"
 	"math/rand"
@@ -73,7 +74,7 @@ type Individual struct {
 }
 
 func (i *Individual) Run(weightedGraph graph.WeightedGraph[vector.Coordinate, graph.DistanceAngle]) {
-	config := graph.Config{
+	config := ant.Config{
 		NumOfAnts:                    i.NumOfAnts,
 		NumOfIterations:              i.NumOfIterations,
 		RandomChance:                 i.RandomChance,
@@ -83,7 +84,7 @@ func (i *Individual) Run(weightedGraph graph.WeightedGraph[vector.Coordinate, gr
 		EliteProportion:              i.EliteProportion,
 		CutoffWhenLongerThanShortest: i.CutoffWhenLongerThanShortest,
 	}
-	i.ResultLength = graph.LengthOfPheromonePath(graph.VisitAllAntColonyOptimization(config, weightedGraph))
+	i.ResultLength = ant.LengthOfPheromonePath(ant.VisitAllAntColonyOptimization(config, weightedGraph))
 }
 
 func (i *Individual) RandomizeParameters() {

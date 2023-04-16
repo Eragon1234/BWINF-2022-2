@@ -43,7 +43,7 @@ func (g *WeightedGraph[D, W]) UpdateEdge(from, to *Vertex[D], weight W) {
 	g.adjacencyMatrix[from.Index][to.Index].Weight = weight
 }
 
-func (g WeightedGraph[Data, Weight]) GetEdges(v *Vertex[Data]) []Edge[Weight, Data] {
+func (g *WeightedGraph[Data, Weight]) GetEdges(v *Vertex[Data]) []Edge[Weight, Data] {
 	return g.adjacencyMatrix[v.Index]
 }
 
