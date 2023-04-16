@@ -5,6 +5,7 @@ import (
 	"BWINF/pkg/slice"
 	mySync "BWINF/pkg/sync"
 	"BWINF/pkg/sync/atomic"
+	"math"
 	"runtime"
 	"sync"
 	"time"
@@ -48,7 +49,11 @@ func BruteForceMultiGoroutineAstar(p pancake.Stack) pancake.SortSteps {
 	}
 
 	getShortestLength := func() int {
-		return pancake.LenOfSortStepsString(shortest.Load())
+		s := shortest.Load()
+		if s == "" {
+			return math.MaxInt
+		}
+		return pancake.LenOfSortStepsString(s)
 	}
 
 	run := true
