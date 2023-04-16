@@ -4,13 +4,18 @@ import (
 	"BWINF/Aufgabe3/pancake"
 	"BWINF/Aufgabe3/pancake/sort"
 	"BWINF/cli"
+	"BWINF/pkg/set"
 	"errors"
 	"io/fs"
 	"os"
 )
 
 var Astar = cli.Command{
-	Name:        "astar",
+	Name: "astar",
+	Aliases: *set.FromSlice([]string{
+		"a*",
+		"A*",
+	}),
 	Usage:       "astar <filename>",
 	Description: "Berechnet den Sortierweg für den Stack in der Datei mit A*",
 	Action:      sortAstar,
