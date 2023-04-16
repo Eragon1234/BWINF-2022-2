@@ -6,7 +6,7 @@ import (
 )
 
 func cost(p pancake.Stack) int {
-	negativeCount := slice.CountFunc(p, func(i int) bool { return i < 0 })
+	negativeCount := slice.CountFunc(p, func(i int8) bool { return i < 0 })
 	if len(p) < 3 {
 		return len(p) + negativeCount
 	}

@@ -18,7 +18,7 @@ func doState(state State, pushNew func(State), pushSolution func(steps pancake.S
 	nonSortedIndex := slice.NonSortedIndex(p)
 	var negativeCount int
 	if pancake.KeepTrackOfSide {
-		negativeCount = slice.CountFunc(p, func(i int) bool { return i < 0 })
+		negativeCount = slice.CountFunc(p, func(i int8) bool { return i < 0 })
 	}
 
 	if nonSortedIndex == -1 && negativeCount == 0 {
@@ -26,18 +26,24 @@ func doState(state State, pushNew func(State), pushSolution func(steps pancake.S
 		return
 	}
 
-	//if negativeCount == 0 {
-	//	p = p[nonSortedIndex:]
-	//}
+	if negativeCount == 0 {
+		p = p[nonSortedIndex:]
+	}
 
 	if lenOfSteps-1 >= getShortestLength() {
 		return
 	}
 
 	for i := len(p); i >= 0; i-- {
+		var newStack pancake.Stack
+		if i == 0 {
+			newStack = p
+		} else {
+			newStack = *p.Copy()
+		}
 		pushNew(State{
-			Stack: p.Copy().Flip(i),
-			Steps: steps.Copy().Push(i),
+			Stack: newStack.Flip(i),
+			Steps: steps.Copy().Push(int8(i)),
 		})
 	}
 }

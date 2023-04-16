@@ -15,8 +15,8 @@ func CalculatePWUE(n int) (stack pancake.Stack, sortSteps pancake.SortSteps) {
 	})
 	perm := utils.NewPermutation(nums)
 	for p := nums; p != nil; p = perm.Next() {
-		s := slice.Map(p, func(i int) int {
-			return int(i)
+		s := slice.Map(p, func(i int) int8 {
+			return int8(i)
 		})
 		newSortSteps := BruteForce(s)
 		if len(newSortSteps) > len(sortSteps) {

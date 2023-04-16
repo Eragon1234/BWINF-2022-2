@@ -12,7 +12,7 @@ import (
 var KeepTrackOfSide = false
 
 // Stack represents a stack of pancakes/elements
-type Stack []int
+type Stack []int8
 
 func ParseStack(reader io.Reader) (Stack, error) {
 	scanner := bufio.NewScanner(reader)
@@ -25,14 +25,14 @@ func ParseStack(reader io.Reader) (Stack, error) {
 		if err != nil {
 			return Stack{}, err
 		}
-		p.Push(int(i))
+		p.Push(int8(i))
 	}
 	slice.ReverseSlice(p) // reversing the whole stack because we parse it in reverse order
 	return p, nil
 }
 
 func (s Stack) String() string {
-	stringSteps := slice.Map(s, func(e int) string {
+	stringSteps := slice.Map(s, func(e int8) string {
 		return strconv.Itoa(int(e))
 	})
 	return strings.Join(stringSteps, " ")
@@ -40,7 +40,7 @@ func (s Stack) String() string {
 
 // Flip flips the stack at the given index i and removes/eats the topmost pancake/element
 func (p *Stack) Flip(i int) *Stack {
-	index := len(*p) - int(i)
+	index := len(*p) - i
 	slice.ReverseSlice((*p)[index:])
 	_, *p = slice.Pop(*p) // removing/eating the topmost pancake
 	if KeepTrackOfSide {
@@ -53,7 +53,7 @@ func (p *Stack) Flip(i int) *Stack {
 }
 
 // Push adds an element to the stack and increases the length
-func (p *Stack) Push(e int) *Stack {
+func (p *Stack) Push(e int8) *Stack {
 	*p = append(*p, e)
 	return p
 }
