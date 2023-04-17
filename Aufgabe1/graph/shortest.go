@@ -9,14 +9,14 @@ import (
 func VisitAllShortestEdge(g WeightedGraph[vector.Coordinate, DistanceAngle]) []Edge[DistanceAngle, vector.Coordinate] {
 	paths := make([][]Edge[DistanceAngle, vector.Coordinate], 0, len(g.Vertices))
 	for _, v := range g.Vertices {
-		paths = append(paths, VisitAllShortestEdgeWithStart(g, v))
+		paths = append(paths, visitAllShortestEdgeWithStart(g, v))
 	}
 	return slice.MinFunc(paths, func(a, b []Edge[DistanceAngle, vector.Coordinate]) bool {
 		return LengthOfPath(a) < LengthOfPath(b)
 	})
 }
 
-func VisitAllShortestEdgeWithStart(g WeightedGraph[vector.Coordinate, DistanceAngle], start *Vertex[vector.Coordinate]) []Edge[DistanceAngle, vector.Coordinate] {
+func visitAllShortestEdgeWithStart(g WeightedGraph[vector.Coordinate, DistanceAngle], start *Vertex[vector.Coordinate]) []Edge[DistanceAngle, vector.Coordinate] {
 	var visited set.Set[*Vertex[vector.Coordinate]]
 	visited.Add(start)
 	var path []Edge[DistanceAngle, vector.Coordinate]
@@ -52,6 +52,7 @@ func VisitAllShortestEdgeWithStart(g WeightedGraph[vector.Coordinate, DistanceAn
 	return path
 }
 
+// LengthOfPath returns the length of a path.
 func LengthOfPath(path []Edge[DistanceAngle, vector.Coordinate]) float64 {
 	return slice.SumFunc(path, func(a float64, b Edge[DistanceAngle, vector.Coordinate]) float64 {
 		return a + b.Weight.Distance

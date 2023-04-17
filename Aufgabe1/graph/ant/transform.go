@@ -5,6 +5,7 @@ import (
 	"BWINF/Aufgabe1/vector"
 )
 
+// TransformGraph transforms a graph with graph.DistanceAngle edges to a graph with PheromoneDistanceAngle edges.
 func TransformGraph(g graph.WeightedGraph[vector.Coordinate, graph.DistanceAngle]) *graph.WeightedGraph[vector.Coordinate, PheromoneDistanceAngle] {
 	pheromoneGraph := graph.NewWeightedGraph[vector.Coordinate, PheromoneDistanceAngle]()
 	for _, v := range g.Vertices {
@@ -21,6 +22,7 @@ func TransformGraph(g graph.WeightedGraph[vector.Coordinate, graph.DistanceAngle
 	return pheromoneGraph
 }
 
+// transformEdges transforms a slice of graph.DistanceAngle edges to a slice of PheromoneDistanceAngle edges.
 func transformEdges(edges []graph.Edge[graph.DistanceAngle, vector.Coordinate]) []graph.Edge[PheromoneDistanceAngle, vector.Coordinate] {
 	pheromoneEdges := make([]graph.Edge[PheromoneDistanceAngle, vector.Coordinate], len(edges))
 	for i, e := range edges {

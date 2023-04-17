@@ -11,11 +11,13 @@ import (
 	"sync"
 )
 
+// ant is a struct that represents an ant in the ant colony optimization algorithm.
 type ant struct {
 	PheromoneWeight float64
 	DistanceWeight  float64
 }
 
+// newAnt creates a new ant with the given weights.
 func newAnt(PheromoneWeight float64, DistanceWeight float64) *ant {
 	return &ant{
 		PheromoneWeight: PheromoneWeight,
@@ -23,6 +25,7 @@ func newAnt(PheromoneWeight float64, DistanceWeight float64) *ant {
 	}
 }
 
+// Run runs the ant algorithm and sends the result to the result channel.
 func (a *ant) Run(wg *sync.WaitGroup, g *graph.WeightedGraph[vector.Coordinate, PheromoneDistanceAngle], result chan<- []graph.Edge[PheromoneDistanceAngle, vector.Coordinate]) {
 	defer wg.Done()
 
@@ -60,6 +63,8 @@ func (a *ant) Run(wg *sync.WaitGroup, g *graph.WeightedGraph[vector.Coordinate, 
 	result <- path
 }
 
+// chooseNextEdge chooses the next edge for the ant.
+// The edge is chosen by the pheromone and distance
 func (a *ant) chooseNextEdge(edges []graph.Edge[PheromoneDistanceAngle, vector.Coordinate]) graph.Edge[PheromoneDistanceAngle, vector.Coordinate] {
 	weights := make([]float64, len(edges))
 	for i, e := range edges {
@@ -69,6 +74,7 @@ func (a *ant) chooseNextEdge(edges []graph.Edge[PheromoneDistanceAngle, vector.C
 	return edge
 }
 
+// LengthOfPheromonePath calculates the length of the given pheromone path.
 func LengthOfPheromonePath(pheromonePath []graph.Edge[PheromoneDistanceAngle, vector.Coordinate]) float64 {
 	totalDistance := 0.0
 	for _, e := range pheromonePath {
@@ -77,6 +83,7 @@ func LengthOfPheromonePath(pheromonePath []graph.Edge[PheromoneDistanceAngle, ve
 	return totalDistance
 }
 
+// PheromoneDistanceAngle is a struct that contains the pheromone and the distance and angle of an edge.
 type PheromoneDistanceAngle struct {
 	Pheromone     float64
 	DistanceAngle graph.DistanceAngle
