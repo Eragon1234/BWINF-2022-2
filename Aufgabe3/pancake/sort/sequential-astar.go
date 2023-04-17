@@ -30,7 +30,7 @@ func sequentialAstar(p pancake.Stack) pancake.SortSteps {
 			return
 		}
 		visited.Add(stateString)
-		pq.Push(state, cost(*state.Stack))
+		pq.Push(state, cost(state))
 	}
 
 	pushSolution := func(steps pancake.SortSteps) {

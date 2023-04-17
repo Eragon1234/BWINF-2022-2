@@ -26,7 +26,7 @@ func concurrentAstar(p pancake.Stack) pancake.SortSteps {
 	pq.Push(State{
 		Stack: &p,
 		Steps: &pancake.SortSteps{},
-	}, cost(p))
+	}, 0)
 
 	getNext := func() (State, bool) {
 		return pq.Pop()
@@ -38,7 +38,7 @@ func concurrentAstar(p pancake.Stack) pancake.SortSteps {
 			return
 		}
 		visited.Add(stackString)
-		pq.Push(state, cost(*state.Stack))
+		pq.Push(state, cost(state))
 	}
 
 	pushSolution := func(steps pancake.SortSteps) {
