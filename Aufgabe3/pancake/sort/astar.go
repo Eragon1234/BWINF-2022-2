@@ -2,9 +2,10 @@ package sort
 
 import (
 	"BWINF/Aufgabe3/pancake"
+	"runtime"
 )
 
-var WorkerCount = 1
+var WorkerCount = runtime.NumCPU()
 
 // Astar calls sequentialAstar if WorkerCount is 1 otherwise it calls concurrentAstar
 func Astar(p pancake.Stack) pancake.SortSteps {
