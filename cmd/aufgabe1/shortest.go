@@ -35,8 +35,6 @@ func shortest(args []string, c *cli.Command) error {
 	}
 	edges := graph.VisitAllShortestEdge(g)
 	fmt.Println("Länge der Strecke:", graph.LengthOfPath(edges))
-	for _, edge := range edges {
-		fmt.Printf("%v -> %v\n", edge.From.Name, edge.To.Name)
-	}
+	displayPath(edges)
 	return nil
 }
