@@ -1,0 +1,5 @@
+Stack: 2 4 6 3 5 7 1 8
+flip bei 2, neuer Stack 2 4 6 3 5 7 8
+flip bei 7, neuer Stack 8 7 5 3 6 4
+flip bei 3, neuer Stack 8 7 5 4 6
+flip bei 3, neuer Stack 8 7 6 4

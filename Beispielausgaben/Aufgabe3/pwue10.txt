@@ -1,0 +1,3 @@
+PWUE(10) = 6
+Beispiel Stack: 1 2 9 7 4 8 6 3 10 5
+Sortierungs Schritte: 3 9 3 6 3 3

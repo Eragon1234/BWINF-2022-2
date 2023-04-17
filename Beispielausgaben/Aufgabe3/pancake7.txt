@@ -1,0 +1,9 @@
+Stack: 11 16 14 1 9 12 4 2 6 13 7 3 15 10 5 8
+flip bei 11, neuer Stack 11 16 14 1 9 8 5 10 15 3 7 13 6 2 4
+flip bei 8, neuer Stack 11 16 14 1 9 8 5 4 2 6 13 7 3 15
+flip bei 3, neuer Stack 11 16 14 1 9 8 5 4 2 6 13 15 3
+flip bei 5, neuer Stack 11 16 14 1 9 8 5 4 3 15 13 6
+flip bei 12, neuer Stack 6 13 15 3 4 5 8 9 1 14 16
+flip bei 11, neuer Stack 16 14 1 9 8 5 4 3 15 13
+flip bei 8, neuer Stack 16 14 13 15 3 4 5 8 9
+flip bei 6, neuer Stack 16 14 13 9 8 5 4 3
