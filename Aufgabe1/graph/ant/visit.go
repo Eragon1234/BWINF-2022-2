@@ -5,8 +5,6 @@ import (
 	"BWINF/Aufgabe1/vector"
 	"BWINF/pkg/set"
 	"BWINF/pkg/slice"
-	"fmt"
-	"os"
 	"sort"
 	"sync"
 )
@@ -23,10 +21,8 @@ func VisitAllAntColonyOptimization(cfg Config, g graph.WeightedGraph[vector.Coor
 			DistanceAngle: graph.DistanceAngle{Distance: 0, Angle: 0},
 		})
 	}
-	shortestPath := transformEdges(graph.VisitAllShortestEdge(g))
-	updatePheromone(cfg, pheromoneGraph, [][]graph.Edge[PheromoneDistanceAngle, vector.Coordinate]{shortestPath})
-
-	//shortestPath = pheromoneGraph.GetEdges(pheromoneGraph.Vertices["-185.649161 90.144456"])
+	var shortestPath []graph.Edge[PheromoneDistanceAngle, vector.Coordinate]
+	updatePheromone(cfg, pheromoneGraph, [][]graph.Edge[PheromoneDistanceAngle, vector.Coordinate]{transformEdges(graph.VisitAllShortestEdge(g))})
 
 	ants := slice.MakeFunc(cfg.NumOfAnts, func(i int) Ant {
 		return *NewAnt(cfg.PheromoneWeight, cfg.DistanceWeight)
@@ -56,7 +52,7 @@ func VisitAllAntColonyOptimization(cfg Config, g graph.WeightedGraph[vector.Coor
 			continue
 		}
 
-		if LengthOfPheromonePath(newPaths[0]) < LengthOfPheromonePath(shortestPath) {
+		if shortestPath == nil || LengthOfPheromonePath(newPaths[0]) < LengthOfPheromonePath(shortestPath) {
 			shortestPath = newPaths[0]
 		}
 

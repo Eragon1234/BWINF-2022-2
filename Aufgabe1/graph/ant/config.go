@@ -13,11 +13,11 @@ type Config struct {
 }
 
 var DefaultConfig = Config{
-	NumOfAnts:            runtime.NumCPU() * 256,
-	NumOfIterations:      300,
+	NumOfAnts:            runtime.NumCPU() * 16,
+	NumOfIterations:      10000,
 	PheromoneWeight:      1,
 	DistanceWeight:       3,
-	PheromoneEvaporation: 0.03,
+	PheromoneEvaporation: 0.1,
 	PheromoneAmount:      1,
-	Elite:                runtime.NumCPU() * 256,
+	Elite:                runtime.NumCPU() * 4,
 }
