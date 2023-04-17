@@ -23,9 +23,9 @@ func IndexOfBiggest[T pkg.Number](s []T) int { // O(n)
 // NonSortedIndex returns the index of the first number that is not sorted.
 // If the slice is sorted, -1 is returned.
 func NonSortedIndex[T pkg.Number](s []T) int { // O(n)
-	for i := 1; i < len(s); i++ {
-		if s[i] < s[i-1] {
-			return i - 1
+	for i := range s {
+		if IndexOfBiggest(s[i:]) != 0 {
+			return i
 		}
 	}
 	return -1

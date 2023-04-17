@@ -121,6 +121,13 @@ func TestNonSortedIndex(t *testing.T) {
 			},
 			want: -1,
 		},
+		{
+			name: "Test first elements sorted but not the biggest in the slice",
+			args: args{
+				s: []int{3, 2, 4, 1},
+			},
+			want: 0,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
