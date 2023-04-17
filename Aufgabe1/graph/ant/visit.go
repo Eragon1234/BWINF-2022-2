@@ -9,7 +9,7 @@ import (
 	"sync"
 )
 
-func VisitAllAntColonyOptimization(cfg Config, g graph.WeightedGraph[vector.Coordinate, graph.DistanceAngle]) []graph.Edge[PheromoneDistanceAngle, vector.Coordinate] {
+func VisitAll(cfg Config, g graph.WeightedGraph[vector.Coordinate, graph.DistanceAngle]) []graph.Edge[PheromoneDistanceAngle, vector.Coordinate] {
 	pheromoneGraph := TransformGraph(g)
 
 	// we add a start vertex to the graph that has length 0 to all other vertices
@@ -24,8 +24,8 @@ func VisitAllAntColonyOptimization(cfg Config, g graph.WeightedGraph[vector.Coor
 	var shortestPath []graph.Edge[PheromoneDistanceAngle, vector.Coordinate]
 	updatePheromone(cfg, pheromoneGraph, [][]graph.Edge[PheromoneDistanceAngle, vector.Coordinate]{transformEdges(graph.VisitAllShortestEdge(g))})
 
-	ants := slice.MakeFunc(cfg.NumOfAnts, func(i int) Ant {
-		return *NewAnt(cfg.PheromoneWeight, cfg.DistanceWeight)
+	ants := slice.MakeFunc(cfg.NumOfAnts, func(i int) ant {
+		return *newAnt(cfg.PheromoneWeight, cfg.DistanceWeight)
 	})
 
 	var wg sync.WaitGroup

@@ -11,19 +11,19 @@ import (
 	"sync"
 )
 
-type Ant struct {
+type ant struct {
 	PheromoneWeight float64
 	DistanceWeight  float64
 }
 
-func NewAnt(PheromoneWeight float64, DistanceWeight float64) *Ant {
-	return &Ant{
+func newAnt(PheromoneWeight float64, DistanceWeight float64) *ant {
+	return &ant{
 		PheromoneWeight: PheromoneWeight,
 		DistanceWeight:  DistanceWeight,
 	}
 }
 
-func (a *Ant) Run(wg *sync.WaitGroup, g *graph.WeightedGraph[vector.Coordinate, PheromoneDistanceAngle], result chan<- []graph.Edge[PheromoneDistanceAngle, vector.Coordinate]) {
+func (a *ant) Run(wg *sync.WaitGroup, g *graph.WeightedGraph[vector.Coordinate, PheromoneDistanceAngle], result chan<- []graph.Edge[PheromoneDistanceAngle, vector.Coordinate]) {
 	defer wg.Done()
 
 	var visited set.Set[*graph.Vertex[vector.Coordinate]]
@@ -60,7 +60,7 @@ func (a *Ant) Run(wg *sync.WaitGroup, g *graph.WeightedGraph[vector.Coordinate, 
 	result <- path
 }
 
-func (a *Ant) chooseNextEdge(edges []graph.Edge[PheromoneDistanceAngle, vector.Coordinate]) graph.Edge[PheromoneDistanceAngle, vector.Coordinate] {
+func (a *ant) chooseNextEdge(edges []graph.Edge[PheromoneDistanceAngle, vector.Coordinate]) graph.Edge[PheromoneDistanceAngle, vector.Coordinate] {
 	weights := make([]float64, len(edges))
 	for i, e := range edges {
 		weights[i] = math.Pow(1/e.Weight.DistanceAngle.Distance, a.DistanceWeight) * math.Pow(math.Max(e.Weight.Pheromone, 1), a.PheromoneWeight)

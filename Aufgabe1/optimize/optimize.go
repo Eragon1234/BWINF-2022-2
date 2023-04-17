@@ -27,7 +27,7 @@ func Optimize(g graph.WeightedGraph[vector.Coordinate, graph.DistanceAngle]) ant
 				if cfg.Elite > cfg.NumOfAnts {
 					cfg.Elite = cfg.NumOfAnts
 				}
-				path := ant.VisitAllAntColonyOptimization(cfg, g)
+				path := ant.VisitAll(cfg, g)
 				length := ant.LengthOfPheromonePath(path)
 				if bestLength == 0 || length < bestLength {
 					bestLength = length

@@ -29,7 +29,7 @@ func antCommand(args []string, cmd *cli.Command) error {
 	if err != nil {
 		return err
 	}
-	path := ant.VisitAllAntColonyOptimization(ant.DefaultConfig, g)
+	path := ant.VisitAll(ant.DefaultConfig, g)
 	fmt.Println("Length of path:", ant.LengthOfPheromonePath(path))
 	for _, edge := range path {
 		fmt.Printf("%v -> %v\n", edge.From.Name, edge.To.Name)
