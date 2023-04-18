@@ -11,7 +11,7 @@ import (
 var command = cli.Command{
 	Name:        "BWINF",
 	Usage:       "BWINF <command> [args]",
-	Description: "BWINF",
+	Description: "Nutze BWINF <command> help um mehr über die einzelnen Befehle zu erfahren.",
 	Subcommands: []cli.Command{
 		aufgabe1.Aufgabe1,
 		aufgabe3.Aufgabe3,
