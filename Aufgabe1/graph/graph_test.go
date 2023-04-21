@@ -37,16 +37,12 @@ func TestWeightedGraph_AddEdge(t *testing.T) {
 		t.Error("No edge between A and B")
 	}
 
-	if !graph.GetEdge(graph.Vertices["B"], graph.Vertices["A"]).Exists {
-		t.Error("No edge between B and A")
+	if graph.GetEdge(graph.Vertices["B"], graph.Vertices["A"]).Exists {
+		t.Error("Edge between B and A exists")
 	}
 
 	if graph.GetEdge(graph.Vertices["A"], graph.Vertices["B"]).Weight != 3 {
 		t.Error("Wrong weight between A and B")
-	}
-
-	if graph.GetEdge(graph.Vertices["B"], graph.Vertices["A"]).Weight != 3 {
-		t.Error("Wrong weight between B and A")
 	}
 
 	if graph.GetEdge(graph.Vertices["A"], graph.Vertices["C"]).Exists {
