@@ -28,9 +28,7 @@ func concurrentAstar(p pancake.Stack) pancake.SortSteps {
 		Steps: &pancake.SortSteps{},
 	}, 0)
 
-	getNext := func() (State, bool) {
-		return pq.Pop()
-	}
+	getNext := pq.Pop
 
 	pushNew := func(state State) {
 		stackString := state.Stack.String()
