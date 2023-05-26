@@ -132,7 +132,7 @@ func TestParseSortSteps(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ParseSortSteps[int](tt.args.s); !reflect.DeepEqual(got, tt.want) {
+			if got := ParseSortSteps(tt.args.s); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("ParseSortSteps() = %v, want %v", got, tt.want)
 			}
 		})
