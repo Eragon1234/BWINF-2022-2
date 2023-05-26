@@ -39,28 +39,28 @@ func (s Stack) String() string {
 }
 
 // Flip flips the stack at the given index i and removes/eats the topmost pancake/element
-func (p *Stack) Flip(i int) *Stack {
-	index := len(*p) - i
-	slice.ReverseSlice((*p)[index:])
-	_, *p = slice.Pop(*p) // removing/eating the topmost pancake
+func (s *Stack) Flip(i int) *Stack {
+	index := len(*s) - i
+	slice.ReverseSlice((*s)[index:])
+	_, *s = slice.Pop(*s) // removing/eating the topmost pancake
 	if KeepTrackOfSide {
 		// flip the signs of the reversed part
-		for i := index; i < len(*p); i++ {
-			(*p)[i] = -(*p)[i]
+		for i := index; i < len(*s); i++ {
+			(*s)[i] = -(*s)[i]
 		}
 	}
-	return p
+	return s
 }
 
 // Push adds an element to the stack and increases the length
-func (p *Stack) Push(e int8) *Stack {
-	*p = append(*p, e)
-	return p
+func (s *Stack) Push(e int8) *Stack {
+	*s = append(*s, e)
+	return s
 }
 
 // Copy returns a copy of the pancake
-func (p *Stack) Copy() *Stack {
-	newP := make(Stack, len(*p))
-	copy(newP, *p)
+func (s *Stack) Copy() *Stack {
+	newP := make(Stack, len(*s))
+	copy(newP, *s)
 	return &newP
 }
